@@ -1,142 +1,50 @@
 import { Injectable } from '@angular/core';
-import { Connectivity } from './connectivity';
-import { Geolocation } from 'ionic-native';
-
-declare var google;
+import { Http, Response, RequestOptions, URLSearchParams, Headers } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class ServerApi {
 
-  mapElement: any;
-  pleaseConnect: any;
-  map: any;
-  mapInitialised: boolean = false;
-  markers: any = [];
-  apiKey: string;
-  mapRequested: boolean = false;
-  scriptsLoaded: boolean = false;
-  directionsService: any;
-  directionsDisplay: any;
-  bounds: any;
-  placesService: any;
-  geocoder: any;
-  initPosition: any;
+  private apiUrl: string = "http://0.0.0.0:4567/";
 
-  constructor(public connectivityService: Connectivity) {
+  constructor(public http: Http) {
 
   }
 
-  getGoogle(): any {
-    return google;
+  public requestRoute(value: any) {
+    return this.post('route', {});
   }
 
-  init(mapElement: any, pleaseConnect: any): Promise<any> {
-    this.mapRequested = true;
-
-    this.mapElement = mapElement;
-    this.pleaseConnect = pleaseConnect;
-
-    return this.loadGoogleMaps();
+  private get(route: string) {
+    return this.http.get(this.apiUrl + route)
+      .toPromise()
+      .then((response: any) => {
+        return response.json();
+      })
+      .catch(this.handleError);
   }
 
-  loadGoogleMaps(): Promise<any> {
-    return new Promise((resolve) => {
-      if (typeof google == "undefined" || typeof google.maps == "undefined") {
-        console.log("Google maps JavaScript needs to be loaded.");
-        this.disableMap();
-        if (this.connectivityService.isOnline()) {
-          window['mapInit'] = () => {
-            this.initMap().then(() => {
-              resolve(true);
-            });
-            this.enableMap();
-          }
-          let script = document.createElement("script");
-          script.id = "googleMaps";
-          if (this.apiKey) {
-            script.src = 'http://maps.google.com/maps/api/js?key=' + this.apiKey + '&libraries=places&callback=mapInit';
-          } else {
-            script.src = 'http://maps.google.com/maps/api/js?&libraries=places&callback=mapInit';
-          }
-          document.body.appendChild(script);
-        }
-      } else {
-        if (this.connectivityService.isOnline()) {
-          this.initMap();
-          this.enableMap();
-        } else {
-          this.disableMap();
-        }
+  private post(route: string, value: any): any {
+    // let params = new URLSearchParams();
+    // params.append('param1', 'name1');
+    return this.http.post(this.apiUrl + route, JSON.stringify(value))
+      .toPromise()
+      .then((response: any) => {
+        console.log('elo', response);
       }
-      this.addConnectivityListeners();
-    });
-
+      ).catch(this.handleError);
   }
 
-  initMap(): Promise<any> {
-
-    this.mapInitialised = true;
-
-    return new Promise((resolve) => {
-
-      Geolocation.getCurrentPosition().then((position) => {
-
-        this.initPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-        let mapOptions = {
-          center: this.initPosition,
-          zoom: 15,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
-
-        this.map = new google.maps.Map(this.mapElement, mapOptions);
-        this.geocoder = new google.maps.Geocoder();
-        this.bounds = new google.maps.LatLngBounds();
-        this.placesService = new google.maps.places.PlacesService(this.map);
-
-        this.directionsService = new google.maps.DirectionsService;
-        this.directionsDisplay = [
-          new google.maps.DirectionsRenderer({
-            map: this.map,
-            suppressMarkers: true,
-            preserveViewport: true,
-          })
-        ];
-        resolve(true);
-      });
-    });
-  }
-
-  disableMap(): void {
-    if (this.pleaseConnect) {
-      this.pleaseConnect.style.display = "block";
+  private handleError(error: Response | any) {
+    let errMsg: string;
+    if (error instanceof Response) {
+      const body = error.json() || '';
+      const err = body.error || JSON.stringify(body);
+      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+    } else {
+      errMsg = error.message ? error.message : error.toString();
     }
-  }
-
-  enableMap(): void {
-    if (this.pleaseConnect) {
-      this.pleaseConnect.style.display = "none";
-    }
-  }
-
-  addConnectivityListeners(): void {
-    document.addEventListener('online', () => {
-      console.log("online");
-      setTimeout(() => {
-        if (typeof google == "undefined" || typeof google.maps == "undefined") {
-          this.loadGoogleMaps();
-        } else {
-          if (!this.mapInitialised) {
-            this.initMap();
-          }
-          this.enableMap();
-        }
-      }, 2000);
-    }, false);
-    document.addEventListener('offline', () => {
-      console.log("offline");
-      this.disableMap();
-    }, false);
-
+    console.error(errMsg);
+    return Promise.reject(errMsg);
   }
 }

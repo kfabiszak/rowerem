@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NavController, Platform, LoadingController } from 'ionic-angular';
+import { GoogleApi } from '../../providers/google-api';
 import { ServerApi } from '../../providers/server-api';
 
 @Component({
@@ -10,7 +11,7 @@ export class HomePage {
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild('pleaseConnect') pleaseConnect: ElementRef;
 
-  constructor(public navCtrl: NavController, public maps: ServerApi, public platform: Platform, private loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public maps: GoogleApi, public server: ServerApi, public platform: Platform, private loadingCtrl: LoadingController) {
 
   }
 
@@ -25,7 +26,7 @@ export class HomePage {
     this.platform.ready().then(() => {
       let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement);
       Promise.all([mapLoaded]).then((result) => {
-        console.log(this.mapElement);
+        this.server.requestRoute(null);
         loadingPopup.dismiss();
       });
     });
