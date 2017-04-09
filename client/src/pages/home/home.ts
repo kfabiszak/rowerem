@@ -10,23 +10,41 @@ import { ServerApi } from '../../providers/server-api';
 export class HomePage {
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild('pleaseConnect') pleaseConnect: ElementRef;
+  private startPoint = { focused: false, text: "", options: {} };
+  private endPoint = { focused: false, text: "", options: {} };
+  private googleReady = false;
 
   constructor(public navCtrl: NavController, public maps: GoogleApi, public server: ServerApi, public platform: Platform, private loadingCtrl: LoadingController) {
 
   }
 
-  ionViewDidLoad() {
+  private changeFocus() {
 
+  }
+
+  private updateInput() {
+
+  }
+
+  private searchAccept() {
+    if (this.googleReady) {
+      this.server.requestRoute({
+        origin: this.startPoint.text,
+        destination: this.endPoint.text
+      });
+    }
+  }
+
+  ionViewDidLoad() {
     let loadingPopup = this.loadingCtrl.create({
       content: 'Loading google map ...'
     });
-
     loadingPopup.present();
 
     this.platform.ready().then(() => {
       let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement);
       Promise.all([mapLoaded]).then((result) => {
-        this.server.requestRoute(null);
+        this.googleReady = true;
         loadingPopup.dismiss();
       });
     });
