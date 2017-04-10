@@ -28,6 +28,7 @@ export class HomePage {
 
   private searchAccept() {
     if (this.googleReady) {
+      console.log(this.startPoint, this.startPoint.text);
       this.server.requestRoute({
         origin: this.startPoint.text,
         destination: this.endPoint.text

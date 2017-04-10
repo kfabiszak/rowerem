@@ -12,7 +12,7 @@ export class ServerApi {
   }
 
   public requestRoute(value: any) {
-    return this.post('route', {});
+    return this.post('route', value);
   }
 
   private get(route: string) {
@@ -27,10 +27,11 @@ export class ServerApi {
   private post(route: string, value: any): any {
     // let params = new URLSearchParams();
     // params.append('param1', 'name1');
+    console.log(JSON.stringify(value));
     return this.http.post(this.apiUrl + route, JSON.stringify(value))
       .toPromise()
       .then((response: any) => {
-        console.log('elo', response);
+        console.log(response);
       }
       ).catch(this.handleError);
   }
