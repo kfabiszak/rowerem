@@ -5,10 +5,10 @@ import com.google.maps.model.LatLng;
 
 public class Route {
 
-    private String startAddress; //gdzie znajduje sie użytkownik
-    private String endAddress;
+    private String origin; //gdzie znajduje sie użytkownik
+    private String destination; //gdzie chce dojechać
     private Station startStation; //z jakiej stacji ma wziac rower
-    private Station endStation;
+    private Station endStation; //gdzie ma zostawić rower
     private DirectionsResult directions;
 
     public Route(DirectionsResult dir) {

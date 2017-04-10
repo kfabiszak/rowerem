@@ -1,28 +1,7 @@
-import com.google.gson.Gson;
-
 import static spark.Spark.*;
-
-class RouteModel {
-    private String origin;
-    private String destination;
-}
-
-class LoginModel {
-    private String login;
-    private String password;
-}
-
-class JsonTransformer {
-
-    public static String toJson(Object object) {
-        return new Gson().toJson(object);
-    }
-
-    public static <T extends Object> T  fromJson(String json, Class<T> classe) {
-        return new Gson().fromJson(json, classe);
-    }
-
-}
+import services.JSONTransformer;
+import travel.Route;
+import user.Registered;
 
 /*
     Dokumentacja: http://sparkjava.com/
@@ -44,19 +23,20 @@ class JsonTransformer {
 */
 public class Bootstrap {
     public static void main(String[] args) {
-        JsonTransformer jsonTransformer = new JsonTransformer();
+        JSONTransformer jsonTransformer = new JSONTransformer();
 
         get("/test-get", (request, response) -> {
             return "MSG TO CLIENT"; //Transfer object toJson
         });
 
         post("/route", (request, response) -> {
-            RouteModel element = jsonTransformer.fromJson(request.body(), RouteModel.class);
+            Route element = jsonTransformer.fromJson(request.body(), Route.class);
+            System.out.println("jest odp");
             return element;
         });
 
         post("/login", (request, response) -> {
-            LoginModel element = jsonTransformer.fromJson(request.body(), LoginModel.class);
+            Registered element = jsonTransformer.fromJson(request.body(), Registered.class);
             return element;
         });
 

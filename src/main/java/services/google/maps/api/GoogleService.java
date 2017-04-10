@@ -20,19 +20,6 @@ public class GoogleService {
         context = new GeoApiContext().setApiKey("AIzaSyAUlf8MTcxeqfUMtIRlU4EFwNDhesHbzN4");
     }
 
-    public void initialize() {
-        try {
-//            DirectionsResult results2 = DirectionsApi.newRequest(context)
-//                    .origin("Rolna 31 Poznań")
-//                    .destination("Piotrowo 4 Poznań")
-//                    .mode(TravelMode.BICYCLING)
-//                    .await();
-//            System.out.println("");
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public DirectionsResult directionsFromAddress (String startAddress, String endAddress) throws InterruptedException, ApiException, IOException {
         return DirectionsApi.newRequest(context)
                 .origin(startAddress)
