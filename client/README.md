@@ -16,4 +16,6 @@
 
 <h2> Run </h2>
 
+* on chrome add **Allow-Control-Allow-Origin** extension from **Chrome Web Store**
+
 * ionic serve
