@@ -141,4 +141,26 @@ export class GoogleApi {
     }, false);
 
   }
+
+  getLocation() {
+    return new Promise((resolve) => {
+      let latLng = this.initPosition;
+      this.geocoder.geocode({ latLng }, (results, status) => {
+        if (status === "OK" && results[1]) {
+          let city, country;
+          for (var i = 0; i < results[0].address_components.length; i++) {
+            for (var b = 0; b < results[0].address_components[i].types.length; b++) {
+              if (results[0].address_components[i].types[b] == "locality") {
+                city = results[0].address_components[i];
+              }
+              if (results[0].address_components[i].types[b] == "country") {
+                country = results[0].address_components[i];
+              }
+            }
+          }
+          resolve({ city, country });
+        }
+      });
+    })
+  }
 }

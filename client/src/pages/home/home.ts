@@ -12,7 +12,8 @@ export class HomePage {
   @ViewChild('pleaseConnect') pleaseConnect: ElementRef;
   private startPoint = { focused: false, text: "", options: {} };
   private endPoint = { focused: false, text: "", options: {} };
-  private googleReady = false;
+  private location: any;
+  private ready: boolean = false;
 
   constructor(public navCtrl: NavController, public maps: GoogleApi, public server: ServerApi, public platform: Platform, private loadingCtrl: LoadingController) {
 
@@ -27,11 +28,11 @@ export class HomePage {
   }
 
   private searchAccept() {
-    if (this.googleReady) {
-      console.log(this.startPoint, this.startPoint.text);
+    if (this.ready) {
       this.server.requestRoute({
         origin: this.startPoint.text,
-        destination: this.endPoint.text
+        destination: this.endPoint.text,
+        location: this.location
       });
     }
   }
@@ -45,8 +46,11 @@ export class HomePage {
     this.platform.ready().then(() => {
       let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement);
       Promise.all([mapLoaded]).then((result) => {
-        this.googleReady = true;
         loadingPopup.dismiss();
+        this.maps.getLocation().then((location) => {
+          this.location = location;
+          this.ready = true;
+        });
       });
     });
   }

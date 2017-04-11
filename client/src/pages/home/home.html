@@ -10,7 +10,7 @@
       <ion-title>Enter start point</ion-title>
     </ion-item>
     <ion-item>
-      <button ion-button outline item-right (click)="searchAccept()">Wyszukaj</button>
+      <button ion-button outline item-right [disabled]="!ready" (click)="searchAccept()">Wyszukaj</button>
     </ion-item>
   </div>
 
