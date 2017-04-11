@@ -1,3 +1,5 @@
+package services;
+
 import static spark.Spark.*;
 import services.JSONTransformer;
 import travel.Route;
@@ -22,7 +24,9 @@ import user.Registered;
     Obsługa logowania rejestracji z MongoDb
 */
 public class Bootstrap {
+
     public static void main(String[] args) {
+
         JSONTransformer jsonTransformer = new JSONTransformer();
 
         get("/test-get", (request, response) -> {
