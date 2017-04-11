@@ -8,7 +8,6 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
-import travel.Route;
 
 import java.io.IOException;
 
@@ -21,38 +20,43 @@ public class GoogleService {
      * Context of GeoApi.
      */
     private GeoApiContext context;
+    /**
+     * Api key to GoogleMaps service.
+     */
+    private String key = "AIzaSyAUlf8MTcxeqfUMtIRlU4EFwNDhesHbzN4";
 
     /**
      * Construct a service with GeoAPI Context, provide the key.
      */
     public GoogleService() {
-        context = new GeoApiContext().setApiKey("AIzaSyAUlf8MTcxeqfUMtIRlU4EFwNDhesHbzN4");
+        context = new GeoApiContext().setApiKey(key);
     }
 
     /**
      * Gets directions from start point to end point (in String addresses).
-     * @param startAddress start address
-     * @param endAddress end address
-     * @return Google DirectionsAPI result from startAdress to endAdress
-     * @throws InterruptedException
-     * @throws ApiException
-     * @throws IOException
+     * @param startAddress start address.
+     * @param endAddress end address.
+     * @param byBike <code>true</code> if directions for bicycling, <code>false</code> for walking.
+     * @return Google DirectionsAPI result from startAdress to endAdress.
+     * @throws InterruptedException e
+     * @throws ApiException e
+     * @throws IOException e
      */
-    public DirectionsResult directionsFromAddress (String startAddress, String endAddress) throws InterruptedException, ApiException, IOException {
+    public DirectionsResult directionsFromAddress (String startAddress, String endAddress, boolean byBike) throws InterruptedException, ApiException, IOException {
         return DirectionsApi.newRequest(context)
                 .origin(startAddress)
                 .destination(endAddress)
-                .mode(TravelMode.BICYCLING)
+                .mode(byBike ? TravelMode.BICYCLING : TravelMode.WALKING)
                 .await();
     } //TODO lepiej chyba wszystko wyznaczać ze współrzędnych a adresy zamieniac za pomocą addressToCoords
 
     /**
      * Converts address string to LatLng coords.
-     * @param address Address String
-     * @return LatLng coords of written address
-     * @throws InterruptedException
-     * @throws ApiException
-     * @throws IOException
+     * @param address Address String.
+     * @return LatLng coords of written address.
+     * @throws InterruptedException e
+     * @throws ApiException e
+     * @throws IOException e
      */
     public LatLng addressToCoords (String address) throws InterruptedException, ApiException, IOException {
         GeocodingResult[] results = GeocodingApi.geocode(context, address).await();
@@ -61,19 +65,19 @@ public class GoogleService {
 
     /**
      * Gets directions from start point to end point (in LatLng coords).
-     * @param startCoords start coordinates
-     * @param endCoords end coordinates
-     * @param byBike <code>true</code> if directions for bicycling, <code>false</code> otherwise
-     * @return DirectionsAPI result from startCoords to endCoords
-     * @throws InterruptedException
-     * @throws ApiException
-     * @throws IOException
+     * @param startCoords start coordinates.
+     * @param endCoords end coordinates.
+     * @param byBike <code>true</code> if directions for bicycling, <code>false</code> for walking.
+     * @return DirectionsAPI result from startCoords to endCoords.
+     * @throws InterruptedException e
+     * @throws ApiException e
+     * @throws IOException e
      */
     public DirectionsResult directionsFromCoords (LatLng startCoords, LatLng endCoords, boolean byBike) throws InterruptedException, ApiException, IOException {
         return DirectionsApi.newRequest(context)
                 .origin(startCoords)
                 .destination(endCoords)
-                .mode(byBike ? TravelMode.BICYCLING : TravelMode.WALKING) //bo musi dojsc do stacji wiec trzeba wyznaczac 3 trasy zawsze tak naprawdę
+                .mode(byBike ? TravelMode.BICYCLING : TravelMode.WALKING)
                 .await();
     }
 

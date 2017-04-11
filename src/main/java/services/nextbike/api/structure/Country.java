@@ -1,5 +1,7 @@
 package services.nextbike.api.structure;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -9,6 +11,11 @@ import java.util.List;
  */
 public class Country extends Place {
 
+    @SerializedName("country")
+    /**
+     * Short name of the country.
+     */
+    private String country_shortname;
     /**
      * Name of the country.
      */
@@ -40,5 +47,9 @@ public class Country extends Place {
 
     public List<City> getCities() {
         return cities;
+    }
+
+    public String getCountry_shortname() {
+        return country_shortname;
     }
 }

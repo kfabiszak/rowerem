@@ -34,7 +34,7 @@ public class JSONTransformer {
      * Pack everything from a Reader to String.
      * @param rd Reader to read
      * @return String containing all of Reader content
-     * @throws IOException
+     * @throws IOException e
      */
     public String readAll(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
