@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, NgZone } from '@angular/core';
 import { NavController, Platform, LoadingController } from 'ionic-angular';
 import { GoogleApi } from '../../providers/google-api';
 import { ServerApi } from '../../providers/server-api';
@@ -10,29 +10,65 @@ import { ServerApi } from '../../providers/server-api';
 export class HomePage {
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild('pleaseConnect') pleaseConnect: ElementRef;
-  private startPoint = { focused: false, text: "", options: {} };
-  private endPoint = { focused: false, text: "", options: {} };
+  private startPoint = { focused: false, text: "", place: {}, latLng: {} };
+  private endPoint = { focused: false, text: "", place: {}, latLng: {} };
+  private focusedPoint: any;
   private location: any;
   private ready: boolean = false;
+  private autocompleteItems: any;
 
-  constructor(public navCtrl: NavController, public maps: GoogleApi, public server: ServerApi, public platform: Platform, private loadingCtrl: LoadingController) {
-
-  }
-
-  private changeFocus() {
+  constructor(public navCtrl: NavController, public maps: GoogleApi, public server: ServerApi, public platform: Platform, private loadingCtrl: LoadingController, private zone: NgZone) {
 
   }
 
-  private updateInput() {
+  private changeFocus(point: any) {
+    this.focusedPoint = point;
+  }
 
+  private updateInput(point: any) {
+    this.updateSearch(point.text);
+  }
+
+  private updateByHint(hint: any) {
+    this.focusedPoint.text = hint.description;
+    this.focusedPoint.place = hint;
+    this.autocompleteItems = [];
+    this.setCoords(this.focusedPoint);
+  }
+
+  private setCoords(point: any) {
+    this.maps.getDetails(point.place).then(latLng => {
+      point.latLng = latLng;
+    })
   }
 
   private searchAccept() {
-    if (this.ready) {
+    if (this.autocompleteItems.length)
+      this.updateByHint(this.autocompleteItems[0]);
+    if (this.ready && this.startPoint.text && this.endPoint.text) {
       this.server.requestRoute({
-        origin: this.startPoint.text,
-        destination: this.endPoint.text,
+        origin: this.startPoint,
+        destination: this.endPoint,
         location: this.location
+      });
+    }
+  }
+
+  private updateSearch(query: String = '') {
+    if (query == '') {
+      this.autocompleteItems = [];
+    } else {
+      this.maps.autocompleteService.getPlacePredictions({
+        input: `${this.location.city.long_name} ${query}`,
+        componentRestrictions: { country: this.location.country.short_name }
+      }, (predictions, status) => {
+        this.autocompleteItems = [];
+        this.zone.run(() => {
+          if (status === "OK") //#todo google.maps.places.PlacesServiceStatus.OK
+            predictions.forEach((prediction) => {
+              this.autocompleteItems.push(prediction);
+            });
+        });
       });
     }
   }

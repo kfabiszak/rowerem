@@ -25,27 +25,35 @@ export class ServerApi {
   }
 
   private post(route: string, value: any): any {
-    // let params = new URLSearchParams();
-    // params.append('param1', 'name1');
-    console.log(value);
-    return this.http.post(this.apiUrl + route, JSON.stringify(value))
+    let packageData = {
+      origin: value.origin.text,
+      originLat: value.origin.latLng.lat,
+      originLng: value.origin.latLng.lng,
+      destination: value.destination.text,
+      destinationLat: value.destination.latLng.lat,
+      destinationLng: value.destination.latLng.lng,
+      country_name: value.location.country.short_name,
+      city_name: value.location.city.long_name
+    };
+    return this.http.post(this.apiUrl + route, JSON.stringify(packageData))
       .toPromise()
       .then((response: any) => {
         console.log(response);
-      }
-      ).catch(this.handleError);
+      }).catch(this.handleError);
   }
 
   private handleError(error: Response | any) {
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    console.error(errMsg);
-    return Promise.reject(errMsg);
+    console.log(error);
+    // return Promise.reject(error);
+    // let errMsg: string;
+    // if (error instanceof Response) {
+    //   const body = error.json() || '';
+    //   const err = body.error || JSON.stringify(body);
+    //   errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+    // } else {
+    //   errMsg = error.message ? error.message : error.toString();
+    // }
+    // console.error(errMsg);
+    // return Promise.reject(errMsg);
   }
 }

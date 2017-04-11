@@ -9,6 +9,11 @@
       <ion-input type="text" [(ngModel)]="endPoint.text" (focus)="changeFocus(endPoint)" (input)="updateInput(endPoint)" placeholder="Wybierz punkt końcowy..."></ion-input>
       <ion-title>Enter start point</ion-title>
     </ion-item>
+    <ion-list class="hints-list">
+      <ion-item *ngFor="let item of autocompleteItems" (click)="updateByHint(item)">
+        {{ item.description }}
+      </ion-item>
+    </ion-list>
     <ion-item>
       <button ion-button outline item-right [disabled]="!ready" (click)="searchAccept()">Wyszukaj</button>
     </ion-item>

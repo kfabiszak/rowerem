@@ -18,6 +18,7 @@ export class GoogleApi {
   scriptsLoaded: boolean = false;
   directionsService: any;
   directionsDisplay: any;
+  autocompleteService: any;
   bounds: any;
   placesService: any;
   geocoder: any;
@@ -93,6 +94,7 @@ export class GoogleApi {
         this.geocoder = new google.maps.Geocoder();
         this.bounds = new google.maps.LatLngBounds();
         this.placesService = new google.maps.places.PlacesService(this.map);
+        this.autocompleteService = new google.maps.places.AutocompleteService();
 
         this.directionsService = new google.maps.DirectionsService;
 
@@ -163,4 +165,16 @@ export class GoogleApi {
       });
     })
   }
+
+  getDetails(place: any): Promise<any> {
+    return new Promise((resolve) => {
+      this.placesService.getDetails(place, (place, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          let location = place.geometry.location;
+          resolve({ lat: location.lat(), lng: location.lng() });
+        }
+      });
+    })
+  }
+
 }
