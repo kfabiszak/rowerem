@@ -4,14 +4,33 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+/**
+ * Represent the city.
+ * @author monday
+ */
 public class City extends Place {
 
+    /**
+     * Unique ID.
+     */
     private int uid;
+    /**
+     * Name of the city.
+     */
     private String name;
+    /**
+     * Number of places within the city.
+     */
     private String num_places; //to do inta
+    /**
+     * Refresh rate of the city.
+     */
     private String refresh_rate; //to do inta
     //TODO bounds
     @SerializedName("places")
+    /**
+     * List of Stations within the city.
+     */
     private List<Station> stations;
 
 

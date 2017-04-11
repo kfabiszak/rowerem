@@ -4,11 +4,26 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+/**
+ * Represent a country.
+ */
 public class Country extends Place {
 
+    /**
+     * Name of the country.
+     */
     private String country_name;
+    /**
+     * URL of the terms.
+     */
     private String terms;
+    /**
+     * URL of the website.
+     */
     private String website;
+    /**
+     * List of Cities.
+     */
     private List<City> cities;
 
     public String getCountry_name() {

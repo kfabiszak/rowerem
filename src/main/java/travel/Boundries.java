@@ -1,5 +1,8 @@
 package travel;
 
+/**
+ * Represent boundaries of the city.
+ */
 public class Boundries { //określa granice miasta
 
     //TODO nie wiem czy bedziemy z tego korzystać czy klient nie wybrał punktu gdzie sieć nie obowiązuje

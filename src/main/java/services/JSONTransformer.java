@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
- * Class that helps to save Object to JSON and retrive Object from JSON.
+ * Help to save Object to JSON and retrive Object from JSON.
  */
 public class JSONTransformer {
 
@@ -20,7 +20,7 @@ public class JSONTransformer {
     } 
 
     /**
-     * Retrieves Object of T from JSON 
+     * Retrieve Object of T from JSON 
      * @param <T> Type of retrieved Object.
      * @param json String containing JSON
      * @param classe Class of Object to retrieve from JSON
@@ -31,7 +31,7 @@ public class JSONTransformer {
     }
 
     /**
-     * Packs everything from a Reader to String.
+     * Pack everything from a Reader to String.
      * @param rd Reader to read
      * @return String containing all of Reader content
      * @throws IOException

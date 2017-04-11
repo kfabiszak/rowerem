@@ -13,14 +13,17 @@ import travel.Route;
 import java.io.IOException;
 
 /**
- * Handles GeoAPI. Enables to get directions from Adress or Coords. 
+ * Google GeoAPI proxy class. Enables to get directions from Adress or Coords. 
  */
 public class GoogleService {
 
+    /**
+     * Context of GeoApi.
+     */
     private GeoApiContext context;
 
     /**
-     * Construct a service with GeoAPI Context, provides the key.
+     * Construct a service with GeoAPI Context, provide the key.
      */
     public GoogleService() {
         context = new GeoApiContext().setApiKey("AIzaSyAUlf8MTcxeqfUMtIRlU4EFwNDhesHbzN4");
@@ -28,9 +31,9 @@ public class GoogleService {
 
     /**
      * Gets directions from start point to end point (in String addresses).
-     * @param startAddress 
-     * @param endAddress
-     * @return directions from startAdress to endAdress
+     * @param startAddress start address
+     * @param endAddress end address
+     * @return Google DirectionsAPI result from startAdress to endAdress
      * @throws InterruptedException
      * @throws ApiException
      * @throws IOException
@@ -45,7 +48,7 @@ public class GoogleService {
 
     /**
      * Converts address string to LatLng coords.
-     * @param address
+     * @param address Address String
      * @return LatLng coords of written address
      * @throws InterruptedException
      * @throws ApiException
@@ -58,10 +61,10 @@ public class GoogleService {
 
     /**
      * Gets directions from start point to end point (in LatLng coords).
-     * @param startCoords
-     * @param endCoords
+     * @param startCoords start coordinates
+     * @param endCoords end coordinates
      * @param byBike <code>true</code> if directions for bicycling, <code>false</code> otherwise
-     * @return directions from startCoords to endCoords
+     * @return DirectionsAPI result from startCoords to endCoords
      * @throws InterruptedException
      * @throws ApiException
      * @throws IOException

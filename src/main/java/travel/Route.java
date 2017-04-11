@@ -3,14 +3,35 @@ package travel;
 import com.google.maps.model.DirectionsResult;
 import services.nextbike.api.structure.Station;
 
+/**
+ * Represent the route.
+ */
 public class Route {
-
+    /**
+     * Current position of user.
+     */
     private String origin; //gdzie znajduje sie użytkownik
+    /**
+     * Route destination.
+     */
     private String destination; //gdzie chce dojechać
+    /**
+     * Route start Station.
+     */
     private Station startStation; //z jakiej stacji ma wziac rower
+    /**
+     * Route end Station.
+     */
     private Station endStation; //gdzie ma zostawić rower
+    /**
+     * Directions of the Route.
+     */
     private DirectionsResult directions;
 
+    /**
+     * construct Route from Google Directions API results.
+     * @param dir Google Directions API result. 
+     */
     public Route(DirectionsResult dir) {
         this.directions = dir;
     }
