@@ -17,7 +17,7 @@ public class JSONTransformer {
      */
     public String toJson(Object object) {
         return new Gson().toJson(object);
-    }
+    } 
 
     /**
      * Retrieves Object of T from JSON 
