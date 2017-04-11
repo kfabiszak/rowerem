@@ -1,6 +1,9 @@
 package services.nextbike.api;
 
 import com.google.gson.*;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.DirectionsLeg;
+import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.LatLng;
 import services.JSONTransformer;
 import services.nextbike.api.structure.City;
@@ -12,9 +15,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import services.google.maps.api.GoogleService;
+import services.nextbike.api.structure.Station;
 
 /**
- * NextBike API proxy class. 
+ * NextBike API proxy class.
  */
 public class NextBikeService {
 
@@ -29,7 +34,8 @@ public class NextBikeService {
 
     /**
      * Construct NetBike proxy. Pass JSON data to Root object.
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     public NextBikeService() throws IOException {
 
@@ -46,14 +52,35 @@ public class NextBikeService {
 
     /**
      * Find the Station closest to the User.
+     *
      * @param origin User position
      * @param city User city
      * @return Coordinates of closest Station.
+     * @throws java.lang.InterruptedException
+     * @throws com.google.maps.errors.ApiException
+     * @throws java.io.IOException
      */
-    public LatLng findClosest(LatLng origin, City city) {
+    public LatLng findClosest(LatLng origin, City city) throws InterruptedException, ApiException, IOException {
+        GoogleService gs = new GoogleService();
 
+        int max = Integer.MAX_VALUE;
+        Station dest = null;
 
-        return new LatLng(1.0, 1.0);
+        for (Station st : city.getStations()) {
+            DirectionsResult dr = gs.directionsFromCoords(origin, st.getLatLng(), false);
+            int sum = 0;
+            for (DirectionsLeg leg : dr.routes[0].legs) {
+                sum += leg.distance.inMeters;
+            }
+            if (sum < max) {
+                dest = st;
+            }
+
+        }
+        if(dest != null)
+            return dest.getLatLng();
+        else
+            return null;
     }
 
 }
