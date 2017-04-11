@@ -1,4 +1,4 @@
-package travel;
+package services.nextbike.api.structure;
 
 import com.google.gson.annotations.SerializedName;
 import com.google.maps.model.LatLng;

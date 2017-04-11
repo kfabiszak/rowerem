@@ -16,6 +16,7 @@ import user.Registered;
 
     #TODO
     Klient przysyła informacje o trasie -> punkt startowy, docelowy, dodatkowe parametry
+    !!!POTRZEBUJE kraj + miasto żeby wysyłał + jak to sprawdzić że mamy taki kraj i miasto - ja będę odpowiadał że nie ma
     Serwer znajduje optymalną trasę w NextBike Api
     Serwer wyznacza trasę w Google Map Api
     Serwer zwraca gotową trasę do klienta

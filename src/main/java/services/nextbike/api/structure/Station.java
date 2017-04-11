@@ -1,4 +1,4 @@
-package travel;
+package services.nextbike.api.structure;
 
 public class Station extends Place {
 
