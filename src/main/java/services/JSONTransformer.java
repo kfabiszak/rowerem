@@ -7,15 +7,15 @@ import java.io.Reader;
 
 public class JSONTransformer {
 
-    public static String toJson(Object object) {
+    public String toJson(Object object) {
         return new Gson().toJson(object);
     }
 
-    public static <T extends Object> T  fromJson(String json, Class<T> classe) {
+    public <T extends Object> T  fromJson(String json, Class<T> classe) {
         return new Gson().fromJson(json, classe);
     }
 
-    public static String readAll(Reader rd) throws IOException {
+    public String readAll(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
         int cp;
         while ((cp = rd.read()) != -1) {

@@ -12,7 +12,7 @@ public class Main {
         Route route = new Route(loc.directionsFromAddress("Rolna 31 Poznań", "Piotrowo 4 Poznań"));
 
         NextBikeService nextBikeService = new NextBikeService();
-
+        //TODO nowy user i tam jego lokalizacja (kraj, miasto)
 
         System.out.println("");
 
