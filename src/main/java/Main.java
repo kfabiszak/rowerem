@@ -1,21 +1,16 @@
 import com.google.maps.errors.ApiException;
-import services.google.maps.api.GoogleService;
-import services.nextbike.api.NextBikeService;
-import travel.Route;
+import services.Bootstrap;
 
 import java.io.IOException;
 
 public class Main {
 
     public static void main(String [] args) throws InterruptedException, ApiException, IOException {
-        GoogleService loc = new GoogleService();
-        Route route = new Route(loc.directionsFromAddress("Rolna 31 Poznań", "Piotrowo 4 Poznań"));
+//        RouteFromClient route = new RouteFromClient(loc.directionsFromAddress("Rolna 31 Poznań", "Piotrowo 4 Poznań")); //sprawdzic czy bootstrap tego nie nadpisze na nulla
 
-        NextBikeService nextBikeService = new NextBikeService();
-        //TODO nowy user i tam jego lokalizacja (kraj, miasto)
+        Bootstrap bootstrap = new Bootstrap();
+        bootstrap.handleRoute();
 
         System.out.println("");
-
     }
-
 }

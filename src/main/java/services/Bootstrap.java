@@ -1,9 +1,17 @@
 package services;
 
 import static spark.Spark.*;
-import services.JSONTransformer;
-import travel.Route;
+
+import com.google.maps.errors.ApiException;
+import services.google.maps.api.GoogleService;
+import services.nextbike.api.NextBikeService;
+import spark.Request;
+import spark.Response;
+import travel.RouteFromClient;
+import travel.RouteToClient;
 import user.Registered;
+
+import java.io.IOException;
 
 /*
     Dokumentacja: http://sparkjava.com/
@@ -24,22 +32,52 @@ import user.Registered;
     #TODO
     Obsługa logowania rejestracji z MongoDb
 */
+
+/**
+ * Manages client-server communication.
+ */
 public class Bootstrap {
 
-    public static void main(String[] args) {
+    /**
+     * Help to save Object to JSON and retrive Object from JSON.
+     */
+    private JSONTransformer jsonTransformer = new JSONTransformer();
+    /**
+     * Enables to get directions from Adress or Coords.
+     */
+    private GoogleService googleService = new GoogleService();
 
-        JSONTransformer jsonTransformer = new JSONTransformer();
-
-        get("/test-get", (request, response) -> {
-            return "MSG TO CLIENT"; //Transfer object toJson
-        });
-
-        post("/route", (request, response) -> {
-            Route element = jsonTransformer.fromJson(request.body(), Route.class);
+    /**
+     * Handels receving and sending route information from and to client.
+     */
+    public void handleRoute() {
+        post("/route", (Request request, Response response) -> {
+            RouteFromClient route = jsonTransformer.fromJson(request.body(), RouteFromClient.class);
             System.out.println("jest odp");
-            return element;
+            NextBikeService nextBikeService = null;
+            try {
+                nextBikeService = new NextBikeService();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (nextBikeService != null) {
+                nextBikeService.findStations(route);
+            }
+//            try {
+//                route.setDirections(googleService.directionsFromAddress(route.getStartStation().getAddress(), route.getEndStation().getAddress(), true));
+//            } catch (InterruptedException | ApiException | IOException e) {
+//                e.printStackTrace();
+//            }
+            RouteToClient routeToClient = new RouteToClient(route.getOrigin(), route.getDestination(), route.getStartStation().getLat(), route.getStartStation().getLng()
+            , route.getEndStation().getLat(), route.getEndStation().getLng());
+            return jsonTransformer.toJson(routeToClient);
         });
+    }
 
+    /**
+     * Get login and pass to verification from client.
+     */
+    public void getLoginFromClient() {
         post("/login", (request, response) -> {
             Registered element = jsonTransformer.fromJson(request.body(), Registered.class);
             return element;
