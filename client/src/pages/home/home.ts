@@ -50,6 +50,12 @@ export class HomePage {
         origin: this.startPoint,
         destination: this.endPoint,
         location: this.location
+      }).then((response) => {
+        let result = response.json();
+        this.maps.addMarker(result.startStationLat, result.startStationLng);
+        this.maps.addMarker(result.endStationLat, result.endStationLng);
+        this.maps.displayRoute(result.origin, { lat: result.startStationLat, lng: result.startStationLng },
+          { lat: result.endStationLat, lng: result.endStationLng }, result.destination);
       });
     }
   }

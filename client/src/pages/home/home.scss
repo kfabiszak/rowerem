@@ -30,4 +30,8 @@ page-home {
   .hints-list {
     cursor: cell;
   }
+
+  .hints-list ion-item:hover {
+    background-color: #eee;
+  }
 }
