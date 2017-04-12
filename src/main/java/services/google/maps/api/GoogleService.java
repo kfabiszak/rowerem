@@ -48,7 +48,7 @@ public class GoogleService {
                 .destination(endAddress)
                 .mode(byBike ? TravelMode.BICYCLING : TravelMode.WALKING)
                 .await();
-    } //TODO lepiej chyba wszystko wyznaczać ze współrzędnych a adresy zamieniac za pomocą addressToCoords
+    }
 
     /**
      * Converts address string to LatLng coords.
@@ -61,7 +61,7 @@ public class GoogleService {
     public LatLng addressToCoords (String address) throws InterruptedException, ApiException, IOException {
         GeocodingResult[] results = GeocodingApi.geocode(context, address).await();
         return results[0].geometry.location;
-    } //TODO pomyśleć czy potrzebne w drugą stronę
+    }
 
     /**
      * Gets directions from start point to end point (in LatLng coords).
