@@ -37,9 +37,7 @@ export class ServerApi {
     };
     return this.http.post(this.apiUrl + route, JSON.stringify(packageData))
       .toPromise()
-      .then((response: any) => {
-        console.log(response);
-      }).catch(this.handleError);
+      .catch(this.handleError);
   }
 
   private handleError(error: Response | any) {

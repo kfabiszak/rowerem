@@ -177,4 +177,44 @@ export class GoogleApi {
     })
   }
 
+  addMarker(lat: number, lng: number, label: string = ''): void {
+    let icon = 'http://maps.google.com/mapfiles/kml/shapes/horsebackriding.png';
+    let position = new google.maps.LatLng(lat, lng);
+    let marker = new google.maps.Marker({
+      map: this.map,
+      icon,
+      animation: google.maps.Animation.DROP,
+      position,
+      label
+    });
+    this.markers.push(marker);
+  }
+
+  displayRoute(origin: string, stationStart: any, stationEnd: any, destination: string): Promise<any> {
+    let waypoints = [
+      { location: { lat: stationStart.lat, lng: stationStart.lng, stopover: true } },
+      { location: { lat: stationEnd.lat, lng: stationEnd.lng }, stopover: true }
+    ];
+    return new Promise((resolve) => {
+      this.directionsService.route({
+        origin,
+        destination,
+        waypoints,
+        optimizeWaypoints: true,
+        travelMode: 'BICYCLING'
+      }, (response, status) => {
+        if (status == google.maps.DirectionsStatus.OK) {
+          this.directionsDisplay[0].setDirections(response);
+          this.map.setCenter(response.routes[0].bounds.getCenter());
+          this.map.fitBounds((response.routes[0].bounds));
+          if (this.map.getZoom() < 14)
+            this.map.setZoom(14);
+          resolve(response)
+        } else {
+          window.alert('Directions request failed due to ' + status);
+        }
+      });
+    })
+  }
+
 }
