@@ -143,13 +143,7 @@ public class RouteFromClient {
         this.directions = directions;
     }
 
-    //ogolnie tutaj mozemy pobierac z googleService całe to DirectionsResult i juz tutaj sobie wyciagac co trzeba z tych tras
-    //gdzies sie bedziemy tez bawili tymi dystansami i czasem ale nie wiem czy jakas nowa klase do tego czy tutaj pola po prostu
-
-    /*TODO tutaj bym pobierał z klienta gdzie jest i gdzie chce być. (+opcja jezeli wybrał od razu stacje a nie jakis adres)
-      Szukam najbliżej stacji (nextbikeAPI) od punktu startowego i najbliższej od końcowego wyznaczam trasę (googleAPI)
-      Dodatkowo wyznaczam 2 trasy do stacji i ze stacji (googleAPI - tam jest opcja WALKING)*/
-
-    //tutaj obsługa NextBikeService
+    //TODO +opcja jezeli wybrał od razu stacje a nie jakis adres)
+    //TODO Dodatkowo wyznaczam 2 trasy do stacji i ze stacji (googleAPI - tam jest opcja WALKING)
 
 }

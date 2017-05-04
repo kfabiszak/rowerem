@@ -2,7 +2,6 @@ package services;
 
 import static spark.Spark.*;
 
-import com.google.maps.errors.ApiException;
 import services.google.maps.api.GoogleService;
 import services.nextbike.api.NextBikeService;
 import spark.Request;
