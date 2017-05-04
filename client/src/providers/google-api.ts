@@ -15,7 +15,6 @@ export class GoogleApi {
   markers: any = [];
   apiKey: string;
   mapRequested: boolean = false;
-  scriptsLoaded: boolean = false;
   directionsService: any;
   directionsDisplay: any;
   autocompleteService: any;
@@ -25,6 +24,7 @@ export class GoogleApi {
   initPosition: any;
   ready: Promise<any>;
   readyResolve: any;
+  location: any;
 
   constructor(public connectivityService: Connectivity) {
     this.ready = new Promise((resolve) => { this.readyResolve = resolve });
@@ -163,7 +163,8 @@ export class GoogleApi {
               }
             }
           }
-          resolve({ city, country });
+          this.location = { city, country };
+          resolve(this.location);
         }
       });
     })
