@@ -23,9 +23,11 @@ export class GoogleApi {
   placesService: any;
   geocoder: any;
   initPosition: any;
+  ready: Promise<any>;
+  readyResolve: any;
 
   constructor(public connectivityService: Connectivity) {
-
+    this.ready = new Promise((resolve) => { this.readyResolve = resolve });
   }
 
   getGoogle(): any {
@@ -106,6 +108,7 @@ export class GoogleApi {
           })
         ];
 
+        this.readyResolve();
         resolve(true);
       });
     });

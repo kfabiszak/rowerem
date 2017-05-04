@@ -1,15 +1,14 @@
-import { Component, ElementRef, ViewChild, NgZone } from '@angular/core';
-import { NavController, Platform, LoadingController } from 'ionic-angular';
+import { Component, NgZone } from '@angular/core';
+import { NavController, Platform } from 'ionic-angular';
 import { GoogleApi } from '../../providers/google-api';
 import { ServerApi } from '../../providers/server-api';
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html',
+  selector: 'page-browser',
+  templateUrl: 'browser.html',
 })
-export class HomePage {
-  @ViewChild('map') mapElement: ElementRef;
-  @ViewChild('pleaseConnect') pleaseConnect: ElementRef;
+export class BrowserPage {
+
   private startPoint = { focused: false, text: "", place: {}, latLng: {} };
   private endPoint = { focused: false, text: "", place: {}, latLng: {} };
   private focusedPoint: any;
@@ -17,7 +16,7 @@ export class HomePage {
   private ready: boolean = false;
   private autocompleteItems: any;
 
-  constructor(public navCtrl: NavController, public maps: GoogleApi, public server: ServerApi, public platform: Platform, private loadingCtrl: LoadingController, private zone: NgZone) {
+  constructor(public navCtrl: NavController, public maps: GoogleApi, public server: ServerApi, public platform: Platform, private zone: NgZone) {
 
   }
 
@@ -63,7 +62,7 @@ export class HomePage {
   private updateSearch(query: String = '') {
     if (query == '') {
       this.autocompleteItems = [];
-    } else {
+    } else if (this.ready) {
       this.maps.autocompleteService.getPlacePredictions({
         input: `${this.location.city.long_name} ${query}`,
         componentRestrictions: { country: this.location.country.short_name }
@@ -80,15 +79,8 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    let loadingPopup = this.loadingCtrl.create({
-      content: 'Loading google map ...'
-    });
-    loadingPopup.present();
-
     this.platform.ready().then(() => {
-      let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement);
-      Promise.all([mapLoaded]).then((result) => {
-        loadingPopup.dismiss();
+      this.maps.ready.then(() => {
         this.maps.getLocation().then((location) => {
           this.location = location;
           this.ready = true;

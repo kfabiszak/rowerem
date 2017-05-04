@@ -1,0 +1,18 @@
+page-browser {
+  .logo {
+    text-align: center;
+  }
+
+  .search-container, .item-content {
+    background-color: #047bf2;
+  }
+
+  .hints-list ion-item {
+    color: black;
+    cursor: cell;
+  }
+
+  .hints-list ion-item:hover {
+    background-color: #eee;
+  }
+}
