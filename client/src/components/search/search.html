@@ -1,0 +1,20 @@
+<div class="search-container">
+  <div padding>
+    <ion-item class="item-content">
+      <ion-input type="text" [(ngModel)]="startPoint.text" (focus)="changeFocus(startPoint)" (input)="updateInput(startPoint)" placeholder="Wybierz punkt początkowy..."></ion-input>
+    </ion-item>
+    <ion-item class="item-content">
+      <ion-input type="text" [(ngModel)]="endPoint.text" (focus)="changeFocus(endPoint)" (input)="updateInput(endPoint)" placeholder="Wybierz punkt końcowy..."></ion-input>
+    </ion-item>
+  </div>
+</div>
+<div class="hints-container">
+  <ion-list class="hints-list">
+    <ion-item *ngFor="let item of autocompleteItems" (click)="updateByHint(item)">
+      {{ item.description }}
+    </ion-item>
+  </ion-list>
+  <ion-item>
+    <button ion-button outline item-right [disabled]="!ready" (click)="searchAccept()">Wyszukaj</button>
+  </ion-item>
+</div>
