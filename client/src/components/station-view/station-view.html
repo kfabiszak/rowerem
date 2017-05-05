@@ -1,0 +1,19 @@
+<div class="container" [ngClass]="{'loading': !loaded}" padding>
+  <div *ngIf="!loaded">
+    <p>Searching for nearby station...</p>
+  </div>
+  <div *ngIf="loaded">
+    <ion-item class="item-content">
+      <ion-icon name="walk" item-left></ion-icon>
+      <ion-note item-left>
+        <div>Nearby</div> {{station?.distance}}
+      </ion-note>
+      <h2 class="station-name">{{station?.name}}</h2>
+      <ion-icon name="bicycle" item-right></ion-icon>
+      <ion-note item-right>
+        {{station?.freeBikes}}
+        <div>free</div>
+      </ion-note>
+    </ion-item>
+  </div>
+</div>

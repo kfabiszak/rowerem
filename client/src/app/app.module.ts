@@ -9,6 +9,7 @@ import { BrowserPage } from '../pages/browser/browser';
 import { MapPage } from '../pages/map/map';
 
 import { SearchComponent } from '../components/search/search';
+import { StationViewComponent } from '../components/station-view/station-view';
 
 import { ServerApi } from '../providers/server-api';
 import { GoogleApi } from '../providers/google-api';
@@ -23,7 +24,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     TabsPage,
     BrowserPage,
     MapPage,
-    SearchComponent
+    SearchComponent,
+    StationViewComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +38,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     TabsPage,
     BrowserPage,
     MapPage,
-    SearchComponent
+    SearchComponent,
+    StationViewComponent
   ],
   providers: [
     StatusBar,

@@ -1,0 +1,12 @@
+station-view {
+  .container, .item-content {
+    background-color: #047bf2;
+  }
+
+  .loading {
+    background: rgba(0, 0, 0, 0.4);
+  }
+  .station-name {
+    color: $color-first;
+  }
+}
