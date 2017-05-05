@@ -21,10 +21,10 @@ export class GoogleApi {
   bounds: any;
   placesService: any;
   geocoder: any;
-  initPosition: any;
+  lastPosition: any;
+  lastLocation: any;
   ready: Promise<any>;
   readyResolve: any;
-  location: any;
 
   constructor(public connectivityService: Connectivity) {
     this.ready = new Promise((resolve) => { this.readyResolve = resolve });
@@ -82,12 +82,12 @@ export class GoogleApi {
     this.mapInitialised = true;
 
     return new Promise((resolve) => {
-      Geolocation.getCurrentPosition().then((position) => {
+      this.getPosition().then((position) => {
 
-        this.initPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        this.lastPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
         let mapOptions = {
-          center: this.initPosition,
+          center: this.lastPosition,
           zoom: 15,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         }
@@ -147,26 +147,43 @@ export class GoogleApi {
 
   }
 
-  getLocation() {
+  getPosition(cached: boolean = false): Promise<any> {
     return new Promise((resolve) => {
-      let latLng = this.initPosition;
-      this.geocoder.geocode({ latLng }, (results, status) => {
-        if (status === "OK" && results[1]) {
-          let city, country;
-          for (var i = 0; i < results[0].address_components.length; i++) {
-            for (var b = 0; b < results[0].address_components[i].types.length; b++) {
-              if (results[0].address_components[i].types[b] == "locality") {
-                city = results[0].address_components[i];
-              }
-              if (results[0].address_components[i].types[b] == "country") {
-                country = results[0].address_components[i];
+      if (cached && this.lastPosition) {
+        resolve(this.lastPosition);
+      } else {
+        Geolocation.getCurrentPosition().then((position) => {
+          this.lastPosition = position;
+          resolve(this.lastPosition);
+        })
+      }
+    })
+  }
+
+  getLocation(cached: boolean = false): Promise<any> {
+    return new Promise((resolve) => {
+      if (cached && this.lastLocation) {
+        resolve(this.lastLocation);
+      } else {
+        let latLng = this.lastPosition;
+        this.geocoder.geocode({ latLng }, (results, status) => {
+          if (status === "OK" && results[1]) {
+            let city, country;
+            for (var i = 0; i < results[0].address_components.length; i++) {
+              for (var b = 0; b < results[0].address_components[i].types.length; b++) {
+                if (results[0].address_components[i].types[b] == "locality") {
+                  city = results[0].address_components[i];
+                }
+                if (results[0].address_components[i].types[b] == "country") {
+                  country = results[0].address_components[i];
+                }
               }
             }
+            this.lastLocation = { city, country };
+            resolve(this.lastLocation);
           }
-          this.location = { city, country };
-          resolve(this.location);
-        }
-      });
+        });
+      }
     })
   }
 
@@ -215,7 +232,7 @@ export class GoogleApi {
             this.map.setZoom(14);
           resolve(response)
         } else {
-          window.alert('Directions request failed due to ' + status);
+          console.log('Directions request failed due to ' + status);
         }
       });
     })
