@@ -7,5 +7,6 @@
 </ion-header>
 
 <ion-content>
-  <search></search>
+  <search [location]="location" [loaded]="loadedLocation"></search>
+  <station-view [station]="nearby" [loaded]="loadedNearby"></station-view>
 </ion-content>

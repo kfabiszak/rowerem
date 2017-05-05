@@ -1,8 +1,7 @@
-import { Component, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, Platform } from 'ionic-angular';
 import { GoogleApi } from '../../providers/google-api';
 import { ServerApi } from '../../providers/server-api';
-import { SearchModule } from '../../components/search';
 
 @Component({
   selector: 'page-browser',
@@ -10,15 +9,36 @@ import { SearchModule } from '../../components/search';
 })
 export class BrowserPage {
 
+  private location: any;
+  private nearby: any;
+  private loadedLocation: boolean;
+  private loadedNearby: boolean;
+
   constructor(public navCtrl: NavController, public maps: GoogleApi, public server: ServerApi, public platform: Platform) {
 
+  }
+
+  setActualLocation(cached: boolean) {
+    this.maps.getLocation(cached).then((location) => {
+      this.location = location;
+      this.loadedLocation = true;
+    });
+  }
+
+  setActualPosition(cached: boolean) {
+    this.maps.getPosition(cached).then((position) => {
+      this.server.requestNearby(position).then((nearby) => {
+        this.nearby = nearby;
+        this.loadedNearby = true;
+      })
+    })
   }
 
   ionViewDidLoad() {
     this.platform.ready().then(() => {
       this.maps.ready.then(() => {
-        //Map loaded
-
+        this.setActualLocation(true);
+        this.setActualPosition(true);
       });
     });
   }

@@ -1,19 +1,20 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { GoogleApi } from '../../providers/google-api';
 import { ServerApi } from '../../providers/server-api';
 
 @Component({
   selector: 'search',
-  templateUrl: 'search.html'
+  templateUrl: 'search.html',
+  inputs: ['location', 'loaded']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent {
 
   private startPoint = { focused: false, text: "", place: {}, latLng: {} };
   private endPoint = { focused: false, text: "", place: {}, latLng: {} };
   private focusedPoint: any;
   private location: any;
-  private ready: boolean = false;
+  private loaded: boolean = false;
   private autocompleteItems: any;
 
   constructor(public maps: GoogleApi, public server: ServerApi, public platform: Platform, private zone: NgZone) {
@@ -44,7 +45,7 @@ export class SearchComponent implements OnInit {
   private searchAccept() {
     if (this.autocompleteItems.length)
       this.updateByHint(this.autocompleteItems[0]);
-    if (this.ready && this.startPoint.text && this.endPoint.text) {
+    if (this.loaded && this.startPoint.text && this.endPoint.text) {
       this.server.requestRoute({
         origin: this.startPoint,
         destination: this.endPoint,
@@ -62,7 +63,7 @@ export class SearchComponent implements OnInit {
   private updateSearch(query: String = '') {
     if (query == '') {
       this.autocompleteItems = [];
-    } else if (this.ready) {
+    } else if (this.loaded) {
       this.maps.autocompleteService.getPlacePredictions({
         input: `${this.location.city.long_name} ${query}`,
         componentRestrictions: { country: this.location.country.short_name }
@@ -77,16 +78,4 @@ export class SearchComponent implements OnInit {
       });
     }
   }
-
-  ngOnInit() {
-    this.platform.ready().then(() => {
-      this.maps.ready.then(() => {
-        this.maps.getLocation().then((location) => {
-          this.location = location;
-          this.ready = true;
-        });
-      });
-    });
-  }
-
 }
