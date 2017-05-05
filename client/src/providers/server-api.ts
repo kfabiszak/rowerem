@@ -15,6 +15,12 @@ export class ServerApi {
     return this.post('route', value);
   }
 
+  public requestNearby(position: any) {
+    return new Promise((resolve) => {
+      resolve({ name: 'Politechnika Poznańska', freeBikes: 8, distance: '800m' });
+    })
+  }
+
   private get(route: string) {
     return this.http.get(this.apiUrl + route)
       .toPromise()
