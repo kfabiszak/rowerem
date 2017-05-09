@@ -25,6 +25,7 @@ export class ServerApi {
     return this.http.get(this.apiUrl + route)
       .toPromise()
       .then((response: any) => {
+        console.log(response);
         return response.json();
       })
       .catch(this.handleError);

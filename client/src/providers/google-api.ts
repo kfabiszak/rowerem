@@ -13,7 +13,7 @@ export class GoogleApi {
   map: any;
   mapInitialised: boolean = false;
   markers: any = [];
-  apiKey: string;
+  apiKey: string = 'AIzaSyBVeHZPeqnjmAHhMQrAo0j9DOdQ4lzkz-c';
   mapRequested: boolean = false;
   directionsService: any;
   directionsDisplay: any;
@@ -25,6 +25,7 @@ export class GoogleApi {
   lastLocation: any;
   ready: Promise<any>;
   readyResolve: any;
+  styles: any;
 
   constructor(public connectivityService: Connectivity) {
     this.ready = new Promise((resolve) => { this.readyResolve = resolve });
@@ -34,9 +35,10 @@ export class GoogleApi {
     return google;
   }
 
-  init(mapElement: any, pleaseConnect: any): Promise<any> {
+  init(mapElement: any, pleaseConnect: any, styles: any): Promise<any> {
     this.mapRequested = true;
 
+    this.styles = styles;
     this.mapElement = mapElement;
     this.pleaseConnect = pleaseConnect;
 
@@ -58,9 +60,9 @@ export class GoogleApi {
           let script = document.createElement("script");
           script.id = "googleMaps";
           if (this.apiKey) {
-            script.src = 'http://maps.google.com/maps/api/js?key=' + this.apiKey + '&libraries=places&callback=mapInit';
+            script.src = 'https://maps.google.com/maps/api/js?key=' + this.apiKey + '&libraries=places&callback=mapInit';
           } else {
-            script.src = 'http://maps.google.com/maps/api/js?&libraries=places&callback=mapInit';
+            script.src = 'https://maps.google.com/maps/api/js?&libraries=places&callback=mapInit';
           }
           document.body.appendChild(script);
         }
@@ -89,10 +91,12 @@ export class GoogleApi {
         let mapOptions = {
           center: this.lastPosition,
           zoom: 15,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          styles: this.styles
         }
 
         this.map = new google.maps.Map(this.mapElement, mapOptions);
+
         this.geocoder = new google.maps.Geocoder();
         this.bounds = new google.maps.LatLngBounds();
         this.placesService = new google.maps.places.PlacesService(this.map);
@@ -199,7 +203,7 @@ export class GoogleApi {
   }
 
   addMarker(lat: number, lng: number, label: string = ''): void {
-    let icon = 'http://maps.google.com/mapfiles/kml/shapes/horsebackriding.png';
+    let icon = 'https://maps.google.com/mapfiles/kml/shapes/horsebackriding.png';
     let position = new google.maps.LatLng(lat, lng);
     let marker = new google.maps.Marker({
       map: this.map,
