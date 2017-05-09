@@ -2,6 +2,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NavController, Platform, LoadingController } from 'ionic-angular';
 import { GoogleApi } from '../../providers/google-api';
 
+import { styleGray } from './styles';
+
 @Component({
   selector: 'page-map',
   templateUrl: 'map.html',
@@ -22,7 +24,7 @@ export class MapPage {
     loadingPopup.present();
 
     this.platform.ready().then(() => {
-      let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement);
+      let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement, styleGray);
 
       Promise.all([mapLoaded]).then((result) => {
         loadingPopup.dismiss();
