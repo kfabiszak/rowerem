@@ -1,0 +1,16 @@
+<ion-list class="hints-list">
+  <button ion-button full outline [disabled]="historyItems.length == 0" (click)="toggle()">History</button>
+  <div *ngIf="visible">
+    <ion-item *ngFor="let item of historyItems" (click)="update(item)" text-wrap>
+      <ion-icon name="star" item-left></ion-icon>
+      <ion-row>
+        <ion-note>
+          {{ item.startPoint }}
+        </ion-note>
+      </ion-row>
+      <ion-row>
+        {{ item.endPoint }}
+      </ion-row>
+    </ion-item>
+  </div>
+</ion-list>
