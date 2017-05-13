@@ -10,10 +10,12 @@ import { MapPage } from '../pages/map/map';
 
 import { SearchComponent } from '../components/search/search';
 import { StationViewComponent } from '../components/station-view/station-view';
+import { HistoryComponent } from '../components/history/history';
 
 import { ServerApi } from '../providers/server-api';
 import { GoogleApi } from '../providers/google-api';
 import { Connectivity } from '../providers/connectivity';
+import { Storage } from '../providers/storage';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -25,7 +27,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     BrowserPage,
     MapPage,
     SearchComponent,
-    StationViewComponent
+    StationViewComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     BrowserPage,
     MapPage,
     SearchComponent,
-    StationViewComponent
+    StationViewComponent,
+    HistoryComponent
   ],
   providers: [
     StatusBar,
@@ -47,6 +51,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ServerApi,
     GoogleApi,
     Connectivity,
+    Storage,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
