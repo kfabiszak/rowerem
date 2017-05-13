@@ -1,14 +1,22 @@
 <div class="container">
   <div padding>
     <ion-item class="item-content">
-      <ion-input type="text" [(ngModel)]="startPoint.text" (focus)="changeFocus(startPoint)" (input)="updateInput(startPoint)" placeholder="Wybierz punkt początkowy..."></ion-input>
+      <ion-input [disabled]="startPoint.searching" type="text" [(ngModel)]="startPoint.text" (focus)="changeFocus(startPoint)" (input)="updateInput(startPoint)" placeholder="Wybierz punkt początkowy..."></ion-input>
+      <button ion-button item-right (click)="setActualPosition(startPoint)" [hidden]="focusedPoint != startPoint || startPoint.searching" title="Use localication">
+        <ion-icon name="locate"></ion-icon>
+      </button>
+      <ion-spinner [hidden]="!startPoint.searching" item-right></ion-spinner>
     </ion-item>
     <ion-item class="item-content">
-      <ion-input type="text" [(ngModel)]="endPoint.text" (focus)="changeFocus(endPoint)" (input)="updateInput(endPoint)" placeholder="Wybierz punkt końcowy..."></ion-input>
+      <ion-input [disabled]="endPoint.searching" type="text" [(ngModel)]="endPoint.text" (focus)="changeFocus(endPoint)" (input)="updateInput(endPoint)" placeholder="Wybierz punkt końcowy..."></ion-input>
+      <button ion-button item-right (click)="setActualPosition(endPoint)" [hidden]="focusedPoint != endPoint || endPoint.searching" title="Use localication">
+        <ion-icon name="locate"></ion-icon>
+      </button>
+      <ion-spinner [hidden]="!endPoint.searching" item-right></ion-spinner>
     </ion-item>
   </div>
 </div>
-<button ion-button full outline [disabled]="!loaded" (click)="searchAccept()">Wyszukaj</button>
+<button ion-button full outline [disabled]="!loaded || !startPoint.text || !endPoint.text" (click)="searchAccept()">Wyszukaj</button>
 <div class="hints-container">
   <ion-list class="hints-list">
     <ion-item *ngFor="let item of autocompleteItems" (click)="updateByHint(item)">
@@ -16,3 +24,4 @@
     </ion-item>
   </ion-list>
 </div>
+<history (updateByHistory)="updateByHistory($event)"></history>

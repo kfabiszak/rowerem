@@ -164,6 +164,10 @@ export class GoogleApi {
     })
   }
 
+  toLatLng(position) {
+    return new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+  }
+
   getLocation(cached: boolean = false): Promise<any> {
     return new Promise((resolve) => {
       if (cached && this.lastLocation) {

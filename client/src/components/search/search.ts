@@ -2,6 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { GoogleApi } from '../../providers/google-api';
 import { ServerApi } from '../../providers/server-api';
+import { Storage } from '../../providers/storage';
 
 @Component({
   selector: 'search',
@@ -10,14 +11,14 @@ import { ServerApi } from '../../providers/server-api';
 })
 export class SearchComponent {
 
-  private startPoint = { focused: false, text: "", place: {}, latLng: {} };
-  private endPoint = { focused: false, text: "", place: {}, latLng: {} };
+  private startPoint = { searching: false, text: "", place: {}, latLng: {} };
+  private endPoint = { searching: false, text: "", place: {}, latLng: {} };
   private focusedPoint: any;
   private location: any;
   private loaded: boolean = false;
   private autocompleteItems: any;
 
-  constructor(public maps: GoogleApi, public server: ServerApi, public platform: Platform, private zone: NgZone) {
+  constructor(public maps: GoogleApi, public server: ServerApi, public storage: Storage, public platform: Platform, private zone: NgZone) {
 
   }
 
@@ -36,9 +37,32 @@ export class SearchComponent {
     this.setCoords(this.focusedPoint);
   }
 
+  updateByHistory(hisory: any) {
+    this.startPoint.text = hisory.startPoint;
+    this.endPoint.text = hisory.endPoint;
+  }
+
   private setCoords(point: any) {
     this.maps.getDetails(point.place).then(latLng => {
       point.latLng = latLng;
+    })
+  }
+
+  private setActualPosition(point: any) {
+    point.searching = true;
+    this.autocompleteItems = [];
+    new Promise((resolve) => {
+      this.maps.getPosition().then((position) => {
+        const latLng = this.maps.toLatLng(position);
+        this.maps.geocoder.geocode({ latLng }, (results, status) => {
+          if (status === "OK" && results[0]) {
+            resolve(results[0]);
+          }
+        })
+      })
+    }).then((result: any) => {
+      point.text = result.formatted_address;
+      point.searching = false;
     })
   }
 
@@ -46,6 +70,7 @@ export class SearchComponent {
     if (this.autocompleteItems.length)
       this.updateByHint(this.autocompleteItems[0]);
     if (this.loaded && this.startPoint.text && this.endPoint.text) {
+      this.storage.updateHistory(this.startPoint.text, this.endPoint.text);
       this.server.requestRoute({
         origin: this.startPoint,
         destination: this.endPoint,
