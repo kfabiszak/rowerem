@@ -21,6 +21,10 @@ export class HistoryComponent {
     this.updateByHistory.emit(item);
   }
 
+  private remove(item): void {
+    this.storage.removeElHistory(item);
+  }
+
   private show(): void {
     this.fab.close();
   }
@@ -28,4 +32,5 @@ export class HistoryComponent {
   private toggle(): void {
     this.visible = !this.visible;
   }
+
 }

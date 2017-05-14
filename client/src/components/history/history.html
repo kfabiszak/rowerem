@@ -1,16 +1,26 @@
-<ion-list class="hints-list">
+<ion-list>
   <button ion-button full outline [disabled]="historyItems.length == 0" (click)="toggle()">History</button>
   <div *ngIf="visible">
-    <ion-item *ngFor="let item of historyItems" (click)="update(item)" text-wrap>
-      <ion-icon name="star" item-left></ion-icon>
-      <ion-row>
-        <ion-note>
-          {{ item.startPoint }}
-        </ion-note>
-      </ion-row>
-      <ion-row>
-        {{ item.endPoint }}
-      </ion-row>
-    </ion-item>
+    <ion-item-sliding *ngFor="let item of historyItems">
+      <ion-item (click)="update(item)" text-wrap>
+        <ion-icon name="star" item-left></ion-icon>
+        <ion-row>
+          <ion-note>
+            {{ item.startPoint }}
+          </ion-note>
+        </ion-row>
+        <ion-row>
+          {{ item.endPoint }}
+        </ion-row>
+      </ion-item>
+      <ion-item-options side="left">
+        <button ion-button (click)="update(item)">
+          <ion-icon name="navigate"></ion-icon>
+        </button>
+        <button ion-button color="danger" (click)="remove(item)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </div>
 </ion-list>
