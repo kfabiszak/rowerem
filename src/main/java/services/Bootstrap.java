@@ -4,6 +4,9 @@ import static spark.Spark.*;
 
 import services.google.maps.api.GoogleService;
 import services.nextbike.api.NextBikeService;
+import services.nextbike.api.structure.City;
+import services.nextbike.api.structure.Place;
+import services.nextbike.api.structure.Station;
 import spark.Request;
 import spark.Response;
 import travel.RouteFromClient;
@@ -70,6 +73,22 @@ public class Bootstrap {
             RouteToClient routeToClient = new RouteToClient(route.getOrigin(), route.getDestination(), route.getStartStation().getLat(), route.getStartStation().getLng()
             , route.getEndStation().getLat(), route.getEndStation().getLng());
             return jsonTransformer.toJson(routeToClient);
+        });
+        //TODO wysylasz mi lat,lng a ja odsylam stacje
+        post("/station", (Request request, Response response) -> {
+            Place place = jsonTransformer.fromJson(request.body(), Place.class);
+            NextBikeService nextBikeService = null; //TODO inaczej rozwiązać tworzenie API
+            try {
+                nextBikeService = new NextBikeService();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (nextBikeService != null) {
+                City city = nextBikeService.findCity("PL","Poznań");
+                Station closestStation = nextBikeService.findClosest(city, place);
+                return jsonTransformer.toJson(closestStation);
+            }
+            return null; //TODO obsługa nulli (sprawdzanie czy nie null wszedzie)
         });
     }
 

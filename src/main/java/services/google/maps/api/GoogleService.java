@@ -40,7 +40,7 @@ public class GoogleService {
      * @return Google DirectionsAPI result from startAdress to endAdress.
      * @throws InterruptedException e
      * @throws ApiException e
-     * @throws IOException e
+     * @throws IOException Input-Output Exception
      */
     public DirectionsResult directionsFromAddress (String startAddress, String endAddress, boolean byBike) throws InterruptedException, ApiException, IOException {
         return DirectionsApi.newRequest(context)
@@ -56,7 +56,7 @@ public class GoogleService {
      * @return LatLng coords of written address.
      * @throws InterruptedException e
      * @throws ApiException e
-     * @throws IOException e
+     * @throws IOException Input-Output Exception
      */
     public LatLng addressToCoords (String address) throws InterruptedException, ApiException, IOException {
         GeocodingResult[] results = GeocodingApi.geocode(context, address).await();
@@ -71,7 +71,7 @@ public class GoogleService {
      * @return DirectionsAPI result from startCoords to endCoords.
      * @throws InterruptedException e
      * @throws ApiException e
-     * @throws IOException e
+     * @throws IOException Input-Output Exception
      */
     public DirectionsResult directionsFromCoords (LatLng startCoords, LatLng endCoords, boolean byBike) throws InterruptedException, ApiException, IOException {
         return DirectionsApi.newRequest(context)

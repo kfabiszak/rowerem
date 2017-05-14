@@ -2,10 +2,7 @@ package services.nextbike.api;
 
 import com.google.gson.*;
 import services.JSONTransformer;
-import services.nextbike.api.structure.City;
-import services.nextbike.api.structure.Country;
-import services.nextbike.api.structure.Root;
-import services.nextbike.api.structure.Station;
+import services.nextbike.api.structure.*;
 import travel.RouteFromClient;
 
 import java.io.BufferedReader;
@@ -31,7 +28,7 @@ public class NextBikeService {
 
     /**
      * Construct NetBike proxy. Pass JSON data to Root object.
-     * @throws IOException 
+     * @throws IOException Input-Output Exception
      */
     public NextBikeService() throws IOException {
 
@@ -50,16 +47,17 @@ public class NextBikeService {
      * Set city the route is located in. Search in database for name of country and name of city given.
      * @param country_name Name of the Country user is in.
      * @param city_name Name of the City user is in.
-     * @param route Processed RouteFromClient.
+     * @return Found city.
      */
-    public void findCity(String country_name, String city_name, RouteFromClient route) {
+    public City findCity(String country_name, String city_name) {
         for(Country country : root.countries)
             if (country.getCountry_shortname().equals(country_name)) {
                 for (City city : country.getCities())
                     if (city.getName().equals(city_name)) {
-                        route.setCity(city);
+                        return city;
                     }
             }
+        return null;
     }
 
     /**
@@ -94,17 +92,34 @@ public class NextBikeService {
     }
 
     /**
+     * Finds the closest Station near the Place passed as argument.
+     * @param city City in which we're looking for a station.
+     * @param place Place to find the closest station to.
+     * @return Closest station to passed Place.
+     */
+    public Station findClosest(City city, Place place) {
+        Station closestStation = city.getStations().get(0);
+        for(Station station : city.getStations()) {
+            if(distance(place.getLat(), station.getLat(), place.getLng(), station.getLng(), 0.0, 0.0)
+                    < distance(place.getLat(), closestStation.getLat(), place.getLng(), closestStation.getLng(), 0.0, 0.0)) {
+                closestStation = station;
+            }
+        }
+        return closestStation;
+    }
+
+    /**
      * Find the Stations closest to the origin and destination of passed RouteFromClient.
      * @param route Processed RouteFromClient.
      */
     public void findStations(RouteFromClient route) {
-        findCity("PL", "Poznań", route);
+        route.setCity(findCity("PL","Poznań"));
         route.setStartStation(route.getCity().getStations().get(0));
         route.setEndStation(route.getCity().getStations().get(0));
         for(Station station : route.getCity().getStations()) {
             if(distance(route.getOriginLat(), station.getLat(), route.getOriginLng(), station.getLng(), 0.0, 0.0)
                     < distance(route.getOriginLat(), route.getStartStation().getLat(), route.getOriginLng(), route.getStartStation().getLng(), 0.0, 0.0)) {
-                route.setStartStation(station);
+                route.setStartStation(station); //TODO tutaj mółgbym użyć funkcji find closest ale optymalniej jest z jedną pętlą niż z dwoma.
             }
             if(distance(route.getDestinationLat(), station.getLat(), route.getDestinationLng(), station.getLng(), 0.0, 0.0)
                     < distance(route.getDestinationLat(), route.getEndStation().getLat(), route.getDestinationLng(), route.getEndStation().getLng(), 0.0, 0.0)) {
