@@ -18,20 +18,38 @@ export class BrowserPage {
 
   }
 
-  setActualLocation(cached: boolean) {
+  private setActualLocation(cached: boolean): void {
     this.maps.getLocation(cached).then((location) => {
       this.location = location;
       this.loadedLocation = true;
     });
   }
 
-  setActualPosition(cached: boolean) {
+  private setActualPosition(cached: boolean): void {
     this.maps.getPosition(cached).then((position) => {
       this.server.requestNearby(position).then((nearby) => {
         this.nearby = nearby;
         this.loadedNearby = true;
       })
     })
+  }
+
+  private navigateToStation(station: any): void {
+    console.log('navigate to ', station);
+  }
+
+  private navigateRoute(points: any): void {
+    this.server.requestRoute({
+      origin: points.startPoint,
+      destination: points.endPoint,
+      location: this.location
+    }).then((response) => {
+      let result = response.json();
+      this.maps.addMarker(result.startStationLat, result.startStationLng);
+      this.maps.addMarker(result.endStationLat, result.endStationLng);
+      this.maps.displayRoute(result.origin, { lat: result.startStationLat, lng: result.startStationLng },
+        { lat: result.endStationLat, lng: result.endStationLng }, result.destination);
+    });
   }
 
   ionViewDidLoad() {

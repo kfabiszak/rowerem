@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, Output, EventEmitter } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { GoogleApi } from '../../providers/google-api';
 import { ServerApi } from '../../providers/server-api';
@@ -11,6 +11,7 @@ import { Storage } from '../../providers/storage';
 })
 export class SearchComponent {
 
+  @Output() navigate = new EventEmitter;
   private startPoint = { searching: false, text: "", place: {}, latLng: {} };
   private endPoint = { searching: false, text: "", place: {}, latLng: {} };
   private focusedPoint: any;
@@ -70,18 +71,8 @@ export class SearchComponent {
     if (this.autocompleteItems.length)
       this.updateByHint(this.autocompleteItems[0]);
     if (this.loaded && this.startPoint.text && this.endPoint.text) {
-      this.storage.updateHistory(this.startPoint.text, this.endPoint.text);
-      this.server.requestRoute({
-        origin: this.startPoint,
-        destination: this.endPoint,
-        location: this.location
-      }).then((response) => {
-        let result = response.json();
-        this.maps.addMarker(result.startStationLat, result.startStationLng);
-        this.maps.addMarker(result.endStationLat, result.endStationLng);
-        this.maps.displayRoute(result.origin, { lat: result.startStationLat, lng: result.startStationLng },
-          { lat: result.endStationLat, lng: result.endStationLng }, result.destination);
-      });
+      this.storage.updateElHistory(this.startPoint.text, this.endPoint.text);
+      this.navigate.emit({ startPoint: this.startPoint, endPoint: this.endPoint });
     }
   }
 
