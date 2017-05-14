@@ -33,6 +33,10 @@ public class City extends Place {
      */
     private List<Station> stations;
 
+    public City(double lat, double lng) {
+        super(lat, lng);
+    }
+
 
     public int getUid() {
         return uid;

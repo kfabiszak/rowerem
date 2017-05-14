@@ -12,7 +12,7 @@ import com.google.maps.model.TravelMode;
 import java.io.IOException;
 
 /**
- * Google GeoAPI proxy class. Enables to get directions from Adress or Coords. 
+ * Google GeoAPI proxy class. Enables to get directions from Address or Coords.
  */
 public class GoogleService {
 
@@ -37,7 +37,7 @@ public class GoogleService {
      * @param startAddress start address.
      * @param endAddress end address.
      * @param byBike <code>true</code> if directions for bicycling, <code>false</code> for walking.
-     * @return Google DirectionsAPI result from startAdress to endAdress.
+     * @return Google DirectionsAPI result from startAddress to endAddress.
      * @throws InterruptedException e
      * @throws ApiException e
      * @throws IOException Input-Output Exception

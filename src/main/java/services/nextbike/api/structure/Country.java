@@ -33,6 +33,10 @@ public class Country extends Place {
      */
     private List<City> cities;
 
+    public Country(double lat, double lng) {
+        super(lat, lng);
+    }
+
     public String getCountry_name() {
         return country_name;
     }

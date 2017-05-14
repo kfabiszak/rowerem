@@ -19,6 +19,11 @@ public class Place {
      */
     private double lng;
 
+    public Place(double lat, double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
+
     public double getLat() {
         return lat;
     }

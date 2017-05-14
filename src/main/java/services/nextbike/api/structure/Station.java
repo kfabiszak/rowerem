@@ -42,6 +42,10 @@ public class Station extends Place {
      */
     private String bike_numbers;
 
+    public Station(double lat, double lng) {
+        super(lat, lng);
+    }
+
     public int getUid() {
         return uid;
     }
