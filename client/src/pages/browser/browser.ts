@@ -28,14 +28,16 @@ export class BrowserPage {
   private setActualPosition(cached: boolean): void {
     this.maps.getPosition(cached).then((position) => {
       this.server.requestNearby(position).then((nearby) => {
-        this.nearby = nearby;
+        this.nearby = nearby.json();
+        console.log('nearby', this.nearby);
         this.loadedNearby = true;
       })
     })
   }
 
   private navigateToStation(station: any): void {
-    console.log('navigate to ', station);
+    this.maps.addMarker(station.lat, station.lng);
+    this.maps.displayRoute(station, null, null, this.location.latLng);
   }
 
   private navigateRoute(points: any): void {

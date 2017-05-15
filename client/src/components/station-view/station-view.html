@@ -3,26 +3,17 @@
     <p>Searching for nearby station...</p>
   </div>
   <div *ngIf="loaded">
-    <ion-list>
-      <ion-item-sliding>
-        <ion-item class="item-content" (click)="gotoStation()">
-          <ion-icon name="walk" item-left></ion-icon>
-          <ion-note item-left>
-            <div>Nearby</div> {{station?.distance}}
-          </ion-note>
-          <h2 class="station-name">{{station?.name}}</h2>
-          <ion-icon name="bicycle" item-right></ion-icon>
-          <ion-note item-right>
-            {{station?.freeBikes}}
-            <div>free</div>
-          </ion-note>
-        </ion-item>
-        <ion-item-options side="left">
-          <button ion-button (click)="gotoStation()">
-          <ion-icon name="navigate"></ion-icon>
-        </button>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
+    <ion-item class="item-content" (click)="gotoStation()">
+      <ion-icon name="walk" item-left></ion-icon>
+      <ion-note item-left>
+        <div>Nearby</div> {{station?.distance}}
+      </ion-note>
+      <h2 class="station-name">{{station?.name}}</h2>
+      <ion-icon name="bicycle" item-right></ion-icon>
+      <ion-note item-right>
+        {{station?.bikes}}
+        <div>free</div>
+      </ion-note>
+    </ion-item>
   </div>
 </div>
