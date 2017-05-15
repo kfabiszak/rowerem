@@ -12,13 +12,21 @@ export class ServerApi {
   }
 
   public requestRoute(value: any) {
-    return this.post('route', value);
+    const packageData = {
+      origin: value.origin.text,
+      originLat: value.origin.latLng.lat,
+      originLng: value.origin.latLng.lng,
+      destination: value.destination.text,
+      destinationLat: value.destination.latLng.lat,
+      destinationLng: value.destination.latLng.lng,
+      country_name: value.location.country.short_name,
+      city_name: value.location.city.long_name
+    };
+    return this.post('route', packageData);
   }
 
   public requestNearby(position: any) {
-    return new Promise((resolve) => {
-      resolve({ name: 'Politechnika Poznańska', freeBikes: 8, distance: '800m' });
-    })
+    return this.post('station', { lat: position.lat, lng: position.lng });
   }
 
   private get(route: string) {
@@ -32,17 +40,7 @@ export class ServerApi {
   }
 
   private post(route: string, value: any): any {
-    let packageData = {
-      origin: value.origin.text,
-      originLat: value.origin.latLng.lat,
-      originLng: value.origin.latLng.lng,
-      destination: value.destination.text,
-      destinationLat: value.destination.latLng.lat,
-      destinationLng: value.destination.latLng.lng,
-      country_name: value.location.country.short_name,
-      city_name: value.location.city.long_name
-    };
-    return this.http.post(this.apiUrl + route, JSON.stringify(packageData))
+    return this.http.post(this.apiUrl + route, JSON.stringify(value))
       .toPromise()
       .catch(this.handleError);
   }
