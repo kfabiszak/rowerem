@@ -173,7 +173,7 @@ export class GoogleApi {
       if (cached && this.lastLocation) {
         resolve(this.lastLocation);
       } else {
-        let latLng = this.lastPosition;
+        const latLng = this.lastPosition;
         this.geocoder.geocode({ latLng }, (results, status) => {
           if (status === "OK" && results[1]) {
             let city, country;
@@ -187,7 +187,7 @@ export class GoogleApi {
                 }
               }
             }
-            this.lastLocation = { city, country };
+            this.lastLocation = { city, country, latLng };
             resolve(this.lastLocation);
           }
         });
@@ -220,10 +220,10 @@ export class GoogleApi {
   }
 
   displayRoute(origin: string, stationStart: any, stationEnd: any, destination: string): Promise<any> {
-    let waypoints = [
+    let waypoints = (stationStart && stationEnd) ? [
       { location: { lat: stationStart.lat, lng: stationStart.lng, stopover: true } },
       { location: { lat: stationEnd.lat, lng: stationEnd.lng }, stopover: true }
-    ];
+    ] : [];
     return new Promise((resolve) => {
       this.directionsService.route({
         origin,
