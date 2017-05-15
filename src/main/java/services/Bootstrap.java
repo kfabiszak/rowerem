@@ -48,6 +48,26 @@ public class Bootstrap {
      * Enables to get directions from Adress or Coords.
      */
     private GoogleService googleService = new GoogleService();
+    /**
+     * Enables to get locations and other information about bike stations.
+     */
+    private NextBikeService nextBikeService;
+
+    public Bootstrap() {
+        try {
+            this.nextBikeService = new NextBikeService();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void refreshNextBike() {
+        try {
+            this.nextBikeService = new NextBikeService();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Handels receving and sending route information from and to client.
@@ -73,12 +93,6 @@ public class Bootstrap {
         post("/route", (Request request, Response response) -> {
             RouteFromClient route = jsonTransformer.fromJson(request.body(), RouteFromClient.class);
             System.out.println("jest odp");
-            NextBikeService nextBikeService = null;
-            try {
-                nextBikeService = new NextBikeService();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             if (nextBikeService != null) {
                 nextBikeService.findStations(route);
             }
@@ -89,23 +103,28 @@ public class Bootstrap {
 //            }
             RouteToClient routeToClient = new RouteToClient(route.getOrigin(), route.getDestination(), route.getStartStation().getLat(), route.getStartStation().getLng()
             , route.getEndStation().getLat(), route.getEndStation().getLng());
+            System.out.println("odp zwrotna");
             return jsonTransformer.toJson(routeToClient);
         });
+
         //TODO wysylasz mi lat,lng a ja odsylam stacje
         post("/station", (Request request, Response response) -> {
-            Place place = jsonTransformer.fromJson(request.body(), Place.class);
-            NextBikeService nextBikeService = null; //TODO inaczej rozwiązać tworzenie API
-            try {
-                nextBikeService = new NextBikeService();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Place place = jsonTransformer.fromJson(request.body(), Place.class); //TODO tutaj city
             if (nextBikeService != null) {
                 City city = nextBikeService.findCity("PL","Poznań");
                 Station closestStation = nextBikeService.findClosest(city, place);
                 return jsonTransformer.toJson(closestStation);
             }
             return null; //TODO obsługa nulli (sprawdzanie czy nie null wszedzie)
+        });
+
+        post("/all", (Request request, Response response) -> {
+            //TODO odbieram miasto
+            if (nextBikeService != null) {
+                City city = nextBikeService.findCity("PL","Poznań");
+                return jsonTransformer.toJson(city.getStations());
+            }
+            return null;
         });
     }
 

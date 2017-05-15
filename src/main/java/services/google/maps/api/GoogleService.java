@@ -58,7 +58,7 @@ public class GoogleService {
      * @throws ApiException e
      * @throws IOException Input-Output Exception
      */
-    public LatLng addressToCoords (String address) throws InterruptedException, ApiException, IOException {
+    public LatLng addressToCoords (String address) throws InterruptedException, ApiException, IOException, ArrayIndexOutOfBoundsException {
         GeocodingResult[] results = GeocodingApi.geocode(context, address).await();
         return results[0].geometry.location;
     }
