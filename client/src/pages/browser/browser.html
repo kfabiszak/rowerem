@@ -7,6 +7,6 @@
 </ion-header>
 
 <ion-content>
-  <search [location]="location" [loaded]="loadedLocation"></search>
-  <station-view [station]="nearby" [loaded]="loadedNearby"></station-view>
+  <search (navigate)="navigateRoute($event)" [location]="location" [loaded]="loadedLocation"></search>
+  <station-view (navigate)="navigateToStation($event)" [station]="nearby" [loaded]="loadedNearby"></station-view>
 </ion-content>

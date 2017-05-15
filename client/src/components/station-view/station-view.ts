@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'station-view',
@@ -7,11 +7,16 @@ import { Component } from '@angular/core';
 })
 export class StationViewComponent {
 
+  @Output() navigate = new EventEmitter;
   private station: any;
   private loaded: boolean = false;
 
   constructor() {
 
+  }
+
+  private gotoStation(): void {
+    this.navigate.emit(this.station);
   }
 
 }
