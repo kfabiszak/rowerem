@@ -44,7 +44,7 @@ export class SearchComponent {
   }
 
   private setCoords(point: any) {
-    this.maps.getDetails(point.place).then(latLng => {
+    return this.maps.getDetails(point.place).then(latLng => {
       point.latLng = latLng;
     })
   }
@@ -57,23 +57,58 @@ export class SearchComponent {
         const latLng = this.maps.toLatLng(position);
         this.maps.geocoder.geocode({ latLng }, (results, status) => {
           if (status === "OK" && results[0]) {
+            point.text = results[0].formatted_address; //#TODO
+            // this.setCoords(point);
             resolve(results[0]);
           }
         })
       })
     }).then((result: any) => {
-      point.text = result.formatted_address;
       point.searching = false;
     })
   }
 
   private searchAccept() {
-    if (this.autocompleteItems.length)
-      this.updateByHint(this.autocompleteItems[0]);
-    if (this.loaded && this.startPoint.text && this.endPoint.text) {
-      this.storage.updateElHistory(this.startPoint.text, this.endPoint.text);
-      this.navigate.emit({ startPoint: this.startPoint, endPoint: this.endPoint });
+    // if (this.autocompleteItems.length)
+    //   this.updateByHint(this.autocompleteItems[0]);
+    let sP, eP;
+    if (true) { //#TODO comparator, refactoring
+      sP = new Promise((resolve) => {
+        this.maps.autocompleteService.getPlacePredictions({
+          input: `${this.location.city.long_name} ${this.startPoint.text}`,
+          componentRestrictions: { country: this.location.country.short_name }
+        }, (predictions, status) => {
+          if (status === "OK") {
+            this.startPoint.text = predictions[0].description;
+            this.startPoint.place = predictions[0];
+            this.setCoords(this.startPoint).then(() => {
+              resolve(true);
+            });
+          }
+        });
+      });
+      eP = new Promise((resolve) => {
+        this.maps.autocompleteService.getPlacePredictions({
+          input: `${this.location.city.long_name} ${this.endPoint.text}`,
+          componentRestrictions: { country: this.location.country.short_name }
+        }, (predictions, status) => {
+          if (status === "OK") {
+            this.endPoint.text = predictions[0].description;
+            this.endPoint.place = predictions[0];
+            this.setCoords(this.endPoint).then(() => {
+              resolve(true);
+            });
+          }
+        });
+      });
     }
+    Promise.all([sP, eP]).then(() => {
+      this.autocompleteItems = [];
+      if (this.loaded && this.startPoint.text && this.endPoint.text) {
+        this.storage.updateElHistory(this.startPoint.text, this.endPoint.text);
+        this.navigate.emit({ startPoint: this.startPoint, endPoint: this.endPoint });
+      }
+    });
   }
 
   private updateSearch(query: String = '') {

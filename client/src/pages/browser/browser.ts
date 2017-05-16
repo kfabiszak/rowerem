@@ -13,6 +13,7 @@ export class BrowserPage {
   private nearby: any;
   private loadedLocation: boolean;
   private loadedNearby: boolean;
+  private routeMarkers: any = [];
 
   constructor(public navCtrl: NavController, public maps: GoogleApi, public server: ServerApi, public platform: Platform) {
 
@@ -29,14 +30,22 @@ export class BrowserPage {
     this.maps.getPosition(cached).then((position) => {
       this.server.requestNearby(position).then((nearby) => {
         this.nearby = nearby.json();
-        console.log('nearby', this.nearby);
         this.loadedNearby = true;
       })
     })
   }
 
+  private clearRouteMarkers(): void {
+    this.maps.clearMarkers(this.routeMarkers);
+    this.routeMarkers = [];
+  }
+
   private navigateToStation(station: any): void {
-    this.maps.addMarker(station.lat, station.lng);
+    this.clearRouteMarkers()
+    let icon = `${this.maps.iconHost}&chld=S|22FF22|FFFFFF`;
+    this.routeMarkers.push(this.maps.addMarker(this.location.latLng.lat(), this.location.latLng.lng(), icon));
+    icon = `${this.maps.iconHost}&chld=${station.bikes}|FF2222|FFFFFF`;
+    this.routeMarkers.push(this.maps.addMarker(station.lat, station.lng, icon));
     this.maps.displayRoute(station, null, null, this.location.latLng);
   }
 
@@ -46,9 +55,16 @@ export class BrowserPage {
       destination: points.endPoint,
       location: this.location
     }).then((response) => {
-      let result = response.json();
-      this.maps.addMarker(result.startStationLat, result.startStationLng);
-      this.maps.addMarker(result.endStationLat, result.endStationLng);
+      this.clearRouteMarkers()
+      let result = response.json(); //#TODO refactoring
+      let icon = `${this.maps.iconHost}&chld=1|0f82ff|FFFFFF`;
+      this.routeMarkers.push(this.maps.addMarker(result.startStationLat, result.startStationLng, icon));
+      icon = `${this.maps.iconHost}&chld=2|0f82ff|FFFFFF`;
+      this.routeMarkers.push(this.maps.addMarker(result.endStationLat, result.endStationLng, icon));
+      icon = `${this.maps.iconHost}&chld=S|22FF22|FFFFFF`;
+      this.routeMarkers.push(this.maps.addMarker(points.startPoint.latLng.lat, points.startPoint.latLng.lng, icon));
+      icon = `${this.maps.iconHost}&chld=E|FF2222|FFFFFF`;
+      this.routeMarkers.push(this.maps.addMarker(points.endPoint.latLng.lat, points.endPoint.latLng.lng, icon));
       this.maps.displayRoute(result.origin, { lat: result.startStationLat, lng: result.startStationLng },
         { lat: result.endStationLat, lng: result.endStationLng }, result.destination);
     });
