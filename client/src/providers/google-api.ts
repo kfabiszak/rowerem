@@ -14,6 +14,7 @@ export class GoogleApi {
   mapInitialised: boolean = false;
   markers: any = [];
   apiKey: string = 'AIzaSyBVeHZPeqnjmAHhMQrAo0j9DOdQ4lzkz-c';
+  iconHost: string = 'https://chart.apis.google.com/chart?chst=d_map_pin_letter';
   mapRequested: boolean = false;
   directionsService: any;
   directionsDisplay: any;
@@ -206,17 +207,36 @@ export class GoogleApi {
     })
   }
 
-  addMarker(lat: number, lng: number, label: string = ''): void {
-    let icon = 'https://maps.google.com/mapfiles/kml/shapes/horsebackriding.png';
+  clearMarkers(markers: any = this.markers): void {
+    this.setMapOnAllMarkers(null, markers);
+  }
+
+  showMarkers(markers: any = this.markers): void {
+    this.setMapOnAllMarkers(this.map, markers);
+  }
+
+  deleteMarkers(): void {
+    this.clearMarkers();
+    this.markers = [];
+  }
+
+  setMapOnAllMarkers(map, markers): void {
+    markers.forEach(marker => {
+      marker.setMap(map);
+    })
+  }
+
+  addMarker(lat: number, lng: number, icon: string, label: string = ''): any {
     let position = new google.maps.LatLng(lat, lng);
     let marker = new google.maps.Marker({
       map: this.map,
       icon,
-      animation: google.maps.Animation.DROP,
+      // animation: google.maps.Animation.DROP,
       position,
       label
     });
     this.markers.push(marker);
+    return marker;
   }
 
   displayRoute(origin: string, stationStart: any, stationEnd: any, destination: string): Promise<any> {
