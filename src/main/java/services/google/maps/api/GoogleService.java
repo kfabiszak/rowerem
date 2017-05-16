@@ -20,6 +20,7 @@ public class GoogleService {
      * Context of GeoApi.
      */
     private GeoApiContext context;
+    private GoogleApiSingleton gApi;
     /**
      * Api key to GoogleMaps service.
      */
@@ -30,6 +31,12 @@ public class GoogleService {
      */
     public GoogleService() {
         context = new GeoApiContext().setApiKey(key);
+        gApi = GoogleApiSingleton.getInstance();
+    }
+    
+    public GoogleService(GoogleApiSingleton gApi) {
+        this();
+        this.gApi = gApi;
     }
 
     /**
@@ -43,11 +50,7 @@ public class GoogleService {
      * @throws IOException Input-Output Exception
      */
     public DirectionsResult directionsFromAddress (String startAddress, String endAddress, boolean byBike) throws InterruptedException, ApiException, IOException {
-        return DirectionsApi.newRequest(context)
-                .origin(startAddress)
-                .destination(endAddress)
-                .mode(byBike ? TravelMode.BICYCLING : TravelMode.WALKING)
-                .await();
+        return gApi.directionsNewRequestAddress(context, startAddress, endAddress, byBike);
     }
 
     /**
@@ -59,7 +62,7 @@ public class GoogleService {
      * @throws IOException Input-Output Exception
      */
     public LatLng addressToCoords (String address) throws InterruptedException, ApiException, IOException, ArrayIndexOutOfBoundsException {
-        GeocodingResult[] results = GeocodingApi.geocode(context, address).await();
+        GeocodingResult[] results = gApi.geocodingGeocode(context, address);
         return results[0].geometry.location;
     }
 
@@ -74,11 +77,7 @@ public class GoogleService {
      * @throws IOException Input-Output Exception
      */
     public DirectionsResult directionsFromCoords (LatLng startCoords, LatLng endCoords, boolean byBike) throws InterruptedException, ApiException, IOException {
-        return DirectionsApi.newRequest(context)
-                .origin(startCoords)
-                .destination(endCoords)
-                .mode(byBike ? TravelMode.BICYCLING : TravelMode.WALKING)
-                .await();
+        return gApi.directionsNewRequestCoords(context, startCoords, endCoords, byBike);
     }
 
 }
