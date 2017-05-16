@@ -26,7 +26,11 @@ export class ServerApi {
   }
 
   public requestNearby(position: any) {
-    return this.post('station', { lat: position.lat, lng: position.lng });
+    return this.post('station', { lat: position.lat(), lng: position.lng() });
+  }
+
+  public requestAllStations(location: any) {
+    return this.post('all', location);
   }
 
   private get(route: string) {
