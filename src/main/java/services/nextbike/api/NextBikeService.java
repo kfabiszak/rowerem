@@ -6,6 +6,7 @@ import services.nextbike.api.structure.*;
 import travel.RouteFromClient;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -43,6 +44,16 @@ public class NextBikeService {
 
     }
 
+    public NextBikeService(String filename) throws IOException {
+        JSONTransformer jsonTransformer = new JSONTransformer();
+
+        InputStream is = new FileInputStream(filename);
+        BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+        String jsonText = jsonTransformer.readAll(rd);
+
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        root = gson.fromJson(jsonText, Root.class);
+    }
     /**
      * Set city the route is located in. Search in database for name of country and name of city given.
      * @param country_name Name of the Country user is in.

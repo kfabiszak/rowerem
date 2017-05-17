@@ -26,7 +26,7 @@ public class NextBikeServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        nextBikeService = new NextBikeService();
+        nextBikeService = new NextBikeService("nextbike-official.json");
     }
 
     @After
