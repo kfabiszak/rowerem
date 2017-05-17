@@ -16,7 +16,7 @@ import com.google.maps.model.TravelMode;
 import java.io.IOException;
 
 /**
- *
+ * Wrapper for DirectionsApi and GeocodingApi static methods.
  * @author monday
  */
 public class GoogleApiSingleton {

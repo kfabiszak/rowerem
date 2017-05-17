@@ -50,7 +50,7 @@ public class NextBikeService {
      * @return Found city.
      */
     public City findCity(String country_name, String city_name) {
-        for(Country country : root.countries)
+        for(Country country : getRoot().countries)
             if (country.getCountry_shortname().equals(country_name)) {
                 for (City city : country.getCities())
                     if (city.getName().equals(city_name)) {
@@ -98,6 +98,7 @@ public class NextBikeService {
      * @return Closest station to passed Place.
      */
     public Station findClosest(City city, Place place) {
+        if(city.getStations().isEmpty()) return null;
         Station closestStation = city.getStations().get(0);
         for(Station station : city.getStations()) {
             if(distance(place.getLat(), station.getLat(), place.getLng(), station.getLng(), 0.0, 0.0)
@@ -114,6 +115,7 @@ public class NextBikeService {
      */
     public void findStations(RouteFromClient route) {
         route.setCity(findCity("PL","Poznań"));
+        if(route.getCity().getStations().isEmpty()) return;
         route.setStartStation(route.getCity().getStations().get(0));
         route.setEndStation(route.getCity().getStations().get(0));
         for(Station station : route.getCity().getStations()) {

@@ -34,6 +34,9 @@ public class GoogleService {
         gApi = GoogleApiSingleton.getInstance();
     }
     
+    /**
+     * Construct a service with custom GoogleApiSingleton.
+     */
     public GoogleService(GoogleApiSingleton gApi) {
         this();
         this.gApi = gApi;
