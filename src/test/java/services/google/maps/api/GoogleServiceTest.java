@@ -9,12 +9,9 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.Geometry;
 import com.google.maps.model.LatLng;
-import java.io.IOException;
-import org.hamcrest.core.IsEqual;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 

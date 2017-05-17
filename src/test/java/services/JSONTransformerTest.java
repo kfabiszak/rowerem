@@ -5,18 +5,14 @@
  */
 package services;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.maps.model.LatLng;
-import java.io.EOFException;
 import java.io.Reader;
 import java.io.StringReader;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
 
 /**
  *

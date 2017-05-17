@@ -1,9 +1,7 @@
 package services.nextbike.api;
 
-import com.squareup.okhttp.Route;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +12,6 @@ import services.nextbike.api.structure.Station;
 import static org.junit.Assert.*;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.AtLeast;
 import travel.RouteFromClient;
 
 /**
@@ -33,33 +30,74 @@ public class NextBikeServiceTest {
     public void tearDown() throws Exception {
     }
 
+    /**
+     * Test of findCity() method, of NextBikeService class.
+     * City exists in given existing country.
+     * @throws Exception
+     */
     @Test
     public void findCityCorrect() throws Exception {
         City city = nextBikeService.findCity("PL", "Poznań");
         assertEquals(192, city.getUid());
     }
 
+    /**
+     * Test of findCity() method, of NextBikeService class.
+     * City doesn't exist in given existing country.
+     * @throws Exception
+     */
     @Test
     public void findCityDoesntExist() throws Exception {
-        City city = nextBikeService.findCity("XX", "Xtowo");
+        City city = nextBikeService.findCity("PL", "Xtowo");
         assertNull(city);
     }
 
+    /**
+     * Test of findCity() method, of NextBikeService class.
+     * Country doesn't exist.
+     * @throws Exception
+     */
+    @Test
+    public void findCityCountryDoesntExist() throws Exception {
+        City city = nextBikeService.findCity("San Escobar", "Poznan");
+        assertNull(city);
+    }
+
+    /**
+     * Test of distance() method, of NextBikeService class.
+     * Gets distance between the same points.
+     * @throws Exception
+     */
     @Test
     public void distanceSamePoint() throws Exception {
         assertEquals(0.0, nextBikeService.distance(10.0, 10.0, 10.0, 10.0, 0.0, 0.0), 0.001);
     }
 
+    /**
+     * Test of distance() method, of NextBikeService class.
+     * Gets distance between two different points.
+     * @throws Exception
+     */
     @Test
     public void distanceTwoPoints() throws Exception {
         assertEquals(8912656.777, nextBikeService.distance(10.0, 100.0, 10.0, 100.0, 0.0, 0.0), 0.001);
     }
 
+    /**
+     * Test of distance() method, of NextBikeService class.
+     * Gets distance between two different points in opposite configuration.
+     * @throws Exception
+     */
     @Test
     public void distanceSymmetry() throws Exception {
         assertEquals(nextBikeService.distance(10.0, 100.0, 10.0, 100.0, 0, 0), nextBikeService.distance(100.0, 10.0, 100.0, 10.0, 0, 0), 0.000001);
     }
 
+    /**
+     * Test of findClosest() method, of NextBikeService class.
+     * Finds closest station to the point where given point is the location of a station.
+     * @throws Exception
+     */
     @Test
     public void findClosestAtTheStation() throws Exception {
         Place place = new Place(52.402831256725, 16.911622881889);
@@ -67,6 +105,11 @@ public class NextBikeServiceTest {
         assertEquals(nextBikeService.getRoot().countries.get(11).getCities().get(0).getStations().get(0), station); //Poznań Główny
     }
 
+    /**
+     * Test of findClosest() method, of NextBikeService class.
+     * Finds closest station to the point where given point is not a location of a station.
+     * @throws Exception
+     */
     @Test
     public void findClosestToPoint() throws Exception {
         Place place = new Place(52.382176, 16.916346);

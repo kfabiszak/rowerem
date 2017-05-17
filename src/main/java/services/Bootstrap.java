@@ -107,7 +107,7 @@ public class Bootstrap {
             return jsonTransformer.toJson(routeToClient);
         });
 
-        //TODO wysylasz mi lat,lng a ja odsylam stacje
+        //TODO wysylasz mi lat,lng i PL i miasto a ja odsylam stacje
         post("/station", (Request request, Response response) -> {
             Place place = jsonTransformer.fromJson(request.body(), Place.class); //TODO tutaj city
             if (nextBikeService != null) {

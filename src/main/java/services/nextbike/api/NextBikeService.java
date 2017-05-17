@@ -33,6 +33,8 @@ public class NextBikeService {
      */
     public NextBikeService() throws IOException {
 
+        System.out.println("Start of building NextBikeAPI");
+
         JSONTransformer jsonTransformer = new JSONTransformer();
 
         InputStream is = new URL(url).openStream();
@@ -42,6 +44,7 @@ public class NextBikeService {
         Gson gson = new GsonBuilder().serializeNulls().create();
         root = gson.fromJson(jsonText, Root.class);
 
+        System.out.println("End of building NextBikeAPI");
     }
 
     public NextBikeService(String filename) throws IOException {
