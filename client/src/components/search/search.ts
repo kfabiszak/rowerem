@@ -71,43 +71,29 @@ export class SearchComponent {
   private searchAccept() {
     // if (this.autocompleteItems.length)
     //   this.updateByHint(this.autocompleteItems[0]);
-    let sP, eP;
-    if (true) { //#TODO comparator, refactoring
-      sP = new Promise((resolve) => {
-        this.maps.autocompleteService.getPlacePredictions({
-          input: `${this.location.city.long_name} ${this.startPoint.text}`,
-          componentRestrictions: { country: this.location.country.short_name }
-        }, (predictions, status) => {
-          if (status === "OK") {
-            this.startPoint.text = predictions[0].description;
-            this.startPoint.place = predictions[0];
-            this.setCoords(this.startPoint).then(() => {
-              resolve(true);
-            });
-          }
-        });
-      });
-      eP = new Promise((resolve) => {
-        this.maps.autocompleteService.getPlacePredictions({
-          input: `${this.location.city.long_name} ${this.endPoint.text}`,
-          componentRestrictions: { country: this.location.country.short_name }
-        }, (predictions, status) => {
-          if (status === "OK") {
-            this.endPoint.text = predictions[0].description;
-            this.endPoint.place = predictions[0];
-            this.setCoords(this.endPoint).then(() => {
-              resolve(true);
-            });
-          }
-        });
-      });
-    }
-    Promise.all([sP, eP]).then(() => {
+    Promise.all([this.updatePlace(this.startPoint), this.updatePlace(this.endPoint)]).then(() => {
       this.autocompleteItems = [];
       if (this.loaded && this.startPoint.text && this.endPoint.text) {
         this.storage.updateElHistory(this.startPoint.text, this.endPoint.text);
         this.navigate.emit({ startPoint: this.startPoint, endPoint: this.endPoint });
       }
+    });
+  }
+
+  private updatePlace(point: any) {
+    return new Promise((resolve) => {
+      this.maps.autocompleteService.getPlacePredictions({
+        input: `${this.location.city.long_name} ${point.text}`,
+        componentRestrictions: { country: this.location.country.short_name }
+      }, (predictions, status) => {
+        if (status === "OK") {
+          point.text = predictions[0].description;
+          point.place = predictions[0];
+          this.setCoords(point).then(() => {
+            resolve(true);
+          });
+        }
+      });
     });
   }
 
