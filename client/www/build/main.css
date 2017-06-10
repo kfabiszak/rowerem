@@ -29163,6 +29163,14 @@ ion-navbar.toolbar {
   }
 }
 
+favorite {
+  cursor: pointer;
+}
+
+history {
+  cursor: pointer;
+}
+
 search .container, search .item-content {
   background-color: #047bf2;
 }
