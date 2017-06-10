@@ -3,7 +3,7 @@
   <div *ngIf="visible">
     <ion-item-sliding *ngFor="let item of historyItems">
       <ion-item (click)="update(item)" text-wrap>
-        <ion-icon name="star" item-left></ion-icon>
+        <ion-icon class="favorite-icon" name="{{item.isFavorite ? 'star' : 'star-outline'}}" item-left (click)="toggleFavorite(item)"></ion-icon>
         <ion-row>
           <ion-note>
             {{ item.startPoint }}
