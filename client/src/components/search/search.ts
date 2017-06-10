@@ -38,9 +38,17 @@ export class SearchComponent {
     this.setCoords(this.focusedPoint);
   }
 
-  updateByHistory(hisory: any) {
+  private updateByHistory(hisory: any) {
     this.startPoint.text = hisory.startPoint;
     this.endPoint.text = hisory.endPoint;
+  }
+
+  private saveFavorite(startPoint, endPoint) {
+    this.storage.updateElFavorite(startPoint, endPoint);
+  }
+
+  private saveHistory(startPoint, endPoint) {
+    this.storage.updateElHistory(this.startPoint.text, this.endPoint.text);
   }
 
   private setCoords(point: any) {
@@ -57,8 +65,7 @@ export class SearchComponent {
         const latLng = this.maps.toLatLng(position);
         this.maps.geocoder.geocode({ latLng }, (results, status) => {
           if (status === "OK" && results[0]) {
-            point.text = results[0].formatted_address; //#TODO
-            // this.setCoords(point);
+            point.text = results[0].formatted_address;
             resolve(results[0]);
           }
         })
@@ -69,12 +76,11 @@ export class SearchComponent {
   }
 
   private searchAccept() {
-    // if (this.autocompleteItems.length)
-    //   this.updateByHint(this.autocompleteItems[0]);
     Promise.all([this.updatePlace(this.startPoint), this.updatePlace(this.endPoint)]).then(() => {
       this.autocompleteItems = [];
       if (this.loaded && this.startPoint.text && this.endPoint.text) {
-        this.storage.updateElHistory(this.startPoint.text, this.endPoint.text);
+        this.saveHistory(this.startPoint, this.endPoint);
+        // this.saveFavorite(this.startPoint, this.endPoint);
         this.navigate.emit({ startPoint: this.startPoint, endPoint: this.endPoint });
       }
     });
