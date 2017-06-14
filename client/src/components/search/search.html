@@ -24,4 +24,5 @@
     </ion-item>
   </ion-list>
 </div>
-<history (updateByHistory)="updateByHistory($event)"></history>
+<favorite (updateByFavorite)="updateByHistory($event)"></favorite>
+<history (updateByHistory)="updateByHistory($event)" (saveFavorite)="saveFavorite($event.startPoint, $event.endPoint)"></history>

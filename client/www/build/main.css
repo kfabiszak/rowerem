@@ -29163,6 +29163,14 @@ ion-navbar.toolbar {
   }
 }
 
+favorite {
+  cursor: pointer;
+}
+
+history {
+  cursor: pointer;
+}
+
 search .container, search .item-content {
   background-color: #047bf2;
 }
@@ -29239,6 +29247,19 @@ page-map .stations-button {
   z-index: 2;
 }
 
-.no-scroll, .scroll-content {
-  overflow: hidden;
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  /* remove scrollbar space */
+  background: transparent;
+  /* optional: just make scrollbar invisible */
+}
+
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: #FF0000;
 }

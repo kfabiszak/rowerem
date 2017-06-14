@@ -11,6 +11,7 @@ import { MapPage } from '../pages/map/map';
 import { SearchComponent } from '../components/search/search';
 import { StationViewComponent } from '../components/station-view/station-view';
 import { HistoryComponent } from '../components/history/history';
+import { FavoriteComponent } from '../components/favorite/favorite';
 
 import { ServerApi } from '../providers/server-api';
 import { GoogleApi } from '../providers/google-api';
@@ -28,7 +29,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MapPage,
     SearchComponent,
     StationViewComponent,
-    HistoryComponent
+    HistoryComponent,
+    FavoriteComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +45,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MapPage,
     SearchComponent,
     StationViewComponent,
-    HistoryComponent
+    HistoryComponent,
+    FavoriteComponent
   ],
   providers: [
     StatusBar,
