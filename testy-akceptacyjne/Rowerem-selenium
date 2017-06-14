@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8100/" />
+<title>AT01</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">AT01</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@type='text']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>//input[@type='text']</td>
+	<td>kepl</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>css=ion-label.label.label-md</td>
+	<td>0,0</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//input[@type='text'])[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>xpath=(//input[@type='text'])[2]</td>
+	<td>rolna</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>css=ion-label.label.label-md</td>
+	<td>0,0</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//search/button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//img[@src='https://chart.apis.google.com/chart?chst=d_map_pin_letter&amp;chld=S|22FF22|FFFFFF']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//img[@src='https://chart.apis.google.com/chart?chst=d_map_pin_letter&amp;chld=E|FF2222|FFFFFF']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//img[@src='https://chart.apis.google.com/chart?chst=d_map_pin_letter&amp;chld=2|0f82ff|FFFFFF']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//img[@src='https://chart.apis.google.com/chart?chst=d_map_pin_letter&amp;chld=1|0f82ff|FFFFFF']</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
