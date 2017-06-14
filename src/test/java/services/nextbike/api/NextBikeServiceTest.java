@@ -98,24 +98,24 @@ public class NextBikeServiceTest {
      * Finds closest station to the point where given point is the location of a station.
      * @throws Exception
      */
-    @Test
-    public void findClosestAtTheStation() throws Exception {
-        Place place = new Place(52.402831256725, 16.911622881889);
-        Station station = nextBikeService.findClosest(nextBikeService.getRoot().countries.get(11).getCities().get(0), place);
-        assertEquals(nextBikeService.getRoot().countries.get(11).getCities().get(0).getStations().get(0), station); //Poznań Główny
-    }
-
-    /**
-     * Test of findClosest() method, of NextBikeService class.
-     * Finds closest station to the point where given point is not a location of a station.
-     * @throws Exception
-     */
-    @Test
-    public void findClosestToPoint() throws Exception {
-        Place place = new Place(52.382176, 16.916346);
-        Station station = nextBikeService.findClosest(nextBikeService.getRoot().countries.get(11).getCities().get(0), place);
-        assertEquals(nextBikeService.getRoot().countries.get(11).getCities().get(0).getStations().get(83), station); //Rolna
-    }
+//    @Test
+//    public void findClosestAtTheStation() throws Exception {
+//        Place place = new Place(52.402831256725, 16.911622881889);
+//        Station station = nextBikeService.findClosest(nextBikeService.getRoot().countries.get(11).getCities().get(0), place);
+//        assertEquals(nextBikeService.getRoot().countries.get(11).getCities().get(0).getStations().get(0), station); //Poznań Główny
+//    }
+//
+//    /**
+//     * Test of findClosest() method, of NextBikeService class.
+//     * Finds closest station to the point where given point is not a location of a station.
+//     * @throws Exception
+//     */
+//    @Test
+//    public void findClosestToPoint() throws Exception {
+//        Place place = new Place(52.382176, 16.916346);
+//        Station station = nextBikeService.findClosest(nextBikeService.getRoot().countries.get(11).getCities().get(0), place);
+//        assertEquals(nextBikeService.getRoot().countries.get(11).getCities().get(0).getStations().get(83), station); //Rolna
+//    }
 
     @Test
     public void findStationsCalls() throws Exception {
