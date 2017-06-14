@@ -6,6 +6,7 @@ import services.nextbike.api.structure.*;
 import travel.RouteFromClient;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,6 +33,8 @@ public class NextBikeService {
      */
     public NextBikeService() throws IOException {
 
+        System.out.println("Start of building NextBikeAPI");
+
         JSONTransformer jsonTransformer = new JSONTransformer();
 
         InputStream is = new URL(url).openStream();
@@ -41,8 +44,19 @@ public class NextBikeService {
         Gson gson = new GsonBuilder().serializeNulls().create();
         root = gson.fromJson(jsonText, Root.class);
 
+        System.out.println("End of building NextBikeAPI");
     }
 
+    public NextBikeService(String filename) throws IOException {
+        JSONTransformer jsonTransformer = new JSONTransformer();
+
+        InputStream is = new FileInputStream(filename);
+        BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+        String jsonText = jsonTransformer.readAll(rd);
+
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        root = gson.fromJson(jsonText, Root.class);
+    }
     /**
      * Set city the route is located in. Search in database for name of country and name of city given.
      * @param country_name Name of the Country user is in.
@@ -50,7 +64,7 @@ public class NextBikeService {
      * @return Found city.
      */
     public City findCity(String country_name, String city_name) {
-        for(Country country : root.countries)
+        for(Country country : getRoot().countries)
             if (country.getCountry_shortname().equals(country_name)) {
                 for (City city : country.getCities())
                     if (city.getName().equals(city_name)) {
@@ -98,6 +112,7 @@ public class NextBikeService {
      * @return Closest station to passed Place.
      */
     public Station findClosest(City city, Place place) {
+        if(city.getStations().isEmpty()) return null;
         Station closestStation = city.getStations().get(0);
         for(Station station : city.getStations()) {
             if(distance(place.getLat(), station.getLat(), place.getLng(), station.getLng(), 0.0, 0.0)
@@ -114,6 +129,7 @@ public class NextBikeService {
      */
     public void findStations(RouteFromClient route) {
         route.setCity(findCity("PL","Poznań"));
+        if(route.getCity().getStations().isEmpty()) return;
         route.setStartStation(route.getCity().getStations().get(0));
         route.setEndStation(route.getCity().getStations().get(0));
         for(Station station : route.getCity().getStations()) {
