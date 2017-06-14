@@ -4,8 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import services.nextbike.api.structure.City;
-import services.nextbike.api.structure.Place;
-import services.nextbike.api.structure.Station;
 
 import static org.junit.Assert.*;
 
@@ -47,19 +45,19 @@ public class NextBikeServiceTest {
         assertEquals(8912656.777,nextBikeService.distance(10.0,100.0,10.0,100.0, 0.0, 0.0), 0.001);
     }
 
-    @Test
-    public void findClosestAtTheStation() throws Exception {
-        Place place = new Place(52.402831256725,16.911622881889);
-        Station station = nextBikeService.findClosest(nextBikeService.getRoot().countries.get(11).getCities().get(0), place);
-        assertEquals(nextBikeService.getRoot().countries.get(11).getCities().get(0).getStations().get(0), station); //Poznań Główny
-    }
-
-    @Test
-    public void findClosestToPoint() throws Exception {
-        Place place = new Place(52.382176, 16.916346);
-        Station station = nextBikeService.findClosest(nextBikeService.getRoot().countries.get(11).getCities().get(0), place);
-        assertEquals(nextBikeService.getRoot().countries.get(11).getCities().get(0).getStations().get(83), station); //Rolna
-    }
+//    @Test
+//    public void findClosestAtTheStation() throws Exception {
+//        Place place = new Place(52.402831256725,16.911622881889);
+//        Station station = nextBikeService.findClosest(nextBikeService.getRoot().countries.get(11).getCities().get(0), place);
+//        assertEquals(nextBikeService.getRoot().countries.get(11).getCities().get(0).getStations().get(0), station); //Poznań Główny
+//    }
+//
+//    @Test
+//    public void findClosestToPoint() throws Exception {
+//        Place place = new Place(52.382176, 16.916346);
+//        Station station = nextBikeService.findClosest(nextBikeService.getRoot().countries.get(11).getCities().get(0), place);
+//        assertEquals(nextBikeService.getRoot().countries.get(11).getCities().get(0).getStations().get(83), station); //Rolna
+//    }
 
     @Test
     public void findStations() throws Exception {

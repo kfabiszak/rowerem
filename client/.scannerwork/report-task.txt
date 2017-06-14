@@ -1,0 +1,6 @@
+projectKey=trasy
+serverUrl=http://localhost:9000
+serverVersion=6.4.0.25310
+dashboardUrl=http://localhost:9000/dashboard/index/trasy
+ceTaskId=AVyl7eHzfUhxGItu0ARA
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AVyl7eHzfUhxGItu0ARA

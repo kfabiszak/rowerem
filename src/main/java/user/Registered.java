@@ -12,7 +12,7 @@ public class Registered extends User {
     /**
      * Password to log in with.
      */
-    private String password; //takie bezpieczne
+    private String password;
 
     /**
      * Construct regiestered user.
